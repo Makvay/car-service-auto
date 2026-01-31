@@ -13,7 +13,50 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+
+    // Database
+    // ============ DATABASE ============
+    runtimeOnly 'org.postgresql:postgresql'
+
+
+    // Entity модули
+    implementation project(':common-entity-parent:claim-entity')
+    implementation project(':common-entity-parent:client-entity')
+    implementation project(':common-entity-parent:master-entity')
+
+    // DTO модули
+    implementation project(':common-dto-parent:claim-dto')
+    implementation project(':common-dto-parent:client-dto')
+    implementation project(':common-dto-parent:master-dto')
+    implementation project(':common-dto-parent:nsi-dto')
+    implementation project(':common-dto-parent:warehouse-dto')
+
+
+    // MapStruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    //  Lombok + MapStruct
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
+
+
 }
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += [
+            '-Amapstruct.defaultComponentModel=spring',
+            '-Amapstruct.unmappedTargetPolicy=IGNORE'
+    ]
+}
+
+
 
 test {
     useJUnitPlatform()

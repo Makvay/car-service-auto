@@ -2,19 +2,21 @@ plugins {
     id 'java'
 }
 
-group = 'com.pm'
-version = '1.0-SNAPSHOT'
+group = 'ru.car'
+version = '1.0'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
+    // DTO для Warehouse
+    implementation project(':common-dto-parent:warehouse-dto')
 
-test {
-    useJUnitPlatform()
+    // Nsi-entity, чтобы видеть PartCategoryEntity
+    implementation project(':common-entity-parent:nsi-entity')
+
+    // Lombok
+    implementation 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 }

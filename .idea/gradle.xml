@@ -30,7 +30,7 @@
             <option value="$PROJECT_DIR$/common-service-parent/master-microservice" />
             <option value="$PROJECT_DIR$/common-service-parent/notification-microservice" />
             <option value="$PROJECT_DIR$/common-service-parent/nsi-microservice" />
-            <option value="$PROJECT_DIR$/common-service-parent/werehouse-microservice" />
+            <option value="$PROJECT_DIR$/common-service-parent/warehouse-microservice" />
           </set>
         </option>
       </GradleProjectSettings>
