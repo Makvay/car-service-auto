@@ -15,11 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ClaimStatusHistoryEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "claim_status_history_seq")
-    @SequenceGenerator(name = "claim_status_history_seq",
-            sequenceName = "claim.claim_status_history_id_seq",
-            allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

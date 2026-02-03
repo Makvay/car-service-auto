@@ -94,10 +94,9 @@
 
 
 package ru.car.entity.claim;
-
 import jakarta.persistence.*;
 import lombok.*;
-
+import ru.car.entity.client.ClientEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -107,7 +106,8 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "claims", schema = "claim")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClaimEntity {
@@ -116,30 +116,24 @@ public class ClaimEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "claim_number", unique = true)
+    private String claimNumber;
 
-
+    // ЗАМЕНЯЕМ: вместо ClientEntity используем Long
     @Column(name = "client_id", nullable = false)
     private Long clientId;
 
+    // ЗАМЕНЯЕМ: вместо ClientCarEntity используем Long
     @Column(name = "vehicle_id", nullable = false)
     private Long vehicleId;
 
+    // ЗАМЕНЯЕМ: вместо MasterEntity используем Long (может быть null)
     @Column(name = "master_id")
     private Long masterId;
 
-
-
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false, length = 50)
-    @Builder.Default
+    @Column(name = "status", nullable = false)
     private ClaimStatus status = ClaimStatus.CREATED;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "priority", length = 20)
-    @Builder.Default
-    private ClaimPriority priority = ClaimPriority.NORMAL;
-
-
 
     @Column(name = "problem_description", nullable = false, columnDefinition = "TEXT")
     private String problemDescription;
@@ -153,15 +147,15 @@ public class ClaimEntity {
     @Column(name = "mileage_at_entry", nullable = false)
     private Integer mileageAtEntry;
 
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "priority")
+    private ClaimPriority priority = ClaimPriority.NORMAL;
 
     @Column(name = "is_approved")
     private Boolean isApproved;
 
     @Column(name = "is_paid")
     private Boolean isPaid;
-
-
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -181,27 +175,11 @@ public class ClaimEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-
-
     @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Builder.Default
     private List<ClaimWorkItemEntity> workItems = new ArrayList<>();
 
     @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Builder.Default
     private List<ClaimPartEntity> usedParts = new ArrayList<>();
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

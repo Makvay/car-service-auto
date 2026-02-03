@@ -11,10 +11,9 @@ repositories {
 
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
-    implementation project(':common-entity-parent:claim-entity')
-    implementation project(':common-entity-parent:nsi-entity')
 
-    // Остальные зависимости...
+
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

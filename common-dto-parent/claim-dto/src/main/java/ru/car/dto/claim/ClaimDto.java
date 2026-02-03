@@ -1,9 +1,7 @@
 package ru.car.dto.claim;
 
 import lombok.Data;
-import ru.car.dto.client.ClientCarDto;
-import ru.car.dto.client.ClientDto;
-import ru.car.dto.master.MasterDto;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,12 +10,19 @@ import java.time.LocalDateTime;
 public class ClaimDto {
     private Long id;
     private String claimNumber;
-
-
-    private ClientDto client;
-    private ClientCarDto vehicle;
-    private MasterDto master;
-
+    private Long clientId;
+    private String clientFirstName;
+    private String clientLastName;
+    private String clientPhone;
+    private Long vehicleId;
+    private String vehicleVin;
+    private String vehicleLicensePlate;
+    private String vehicleBrand;
+    private String vehicleModel;
+    private Long masterId;
+    private String masterFirstName;
+    private String masterLastName;
+    private String masterSpecialization;
     private ClaimStatus status;
     private String problemDescription;
     private String customerNotes;
@@ -26,11 +31,10 @@ public class ClaimDto {
     private ClaimPriority priority;
     private Boolean isApproved;
     private Boolean isPaid;
-
     private LocalDateTime createdAt;
     private LocalDate scheduledDate;
     private LocalDateTime diagnosisDate;
     private LocalDateTime startDate;
     private LocalDateTime completionDate;
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;;
 }

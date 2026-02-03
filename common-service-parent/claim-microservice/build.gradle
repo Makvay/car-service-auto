@@ -18,7 +18,6 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
 
     // Database
-    // ============ DATABASE ============
     runtimeOnly 'org.postgresql:postgresql'
 
 

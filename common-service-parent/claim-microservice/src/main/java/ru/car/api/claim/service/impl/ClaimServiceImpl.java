@@ -1,21 +1,18 @@
 package ru.car.api.claim.service.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.car.api.claim.mapper.ClaimMapper;
 import ru.car.api.claim.repository.ClaimRepository;
 import ru.car.api.claim.service.ClaimService;
 import ru.car.dto.claim.*;
 import ru.car.entity.claim.ClaimEntity;
-import ru.car.entity.client.ClientCarEntity;
-import ru.car.entity.client.ClientEntity;
-import ru.car.entity.master.MasterEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -31,24 +28,12 @@ public class ClaimServiceImpl implements ClaimService {
         log.info("Создание заявки для клиента: {}, автомобиль: {}",
                 request.getClientId(), request.getVehicleId());
 
-        // 1. Создаем заглушки
-        ClientEntity client = new ClientEntity();
-        client.setId(request.getClientId());
-        client.setFirstName("Клиент " + request.getClientId());
-
-        ClientCarEntity vehicle = new ClientCarEntity();
-        vehicle.setId(request.getVehicleId());
-        vehicle.setLicensePlate("A" + request.getVehicleId() + "BC");
-
-        // 2. Используем MapStruct для создания Entity
-        ClaimEntity claim = claimMapper.toEntity(request, client, vehicle);
-
-        // 3. Сохраняем
+        ClaimEntity claim = claimMapper.toEntity(request);
         ClaimEntity savedClaim = claimRepository.save(claim);
 
-        log.info("Заявка создана: ID={}", savedClaim.getId());
+        log.info("Заявка создана: ID={}, номер={}",
+                savedClaim.getId(), savedClaim.getClaimNumber());
 
-        // 4. Возвращаем DTO
         return claimMapper.toDto(savedClaim);
     }
 
@@ -70,7 +55,7 @@ public class ClaimServiceImpl implements ClaimService {
 
         return claims.stream()
                 .map(claimMapper::toDto)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -92,7 +77,7 @@ public class ClaimServiceImpl implements ClaimService {
 
         return claims.stream()
                 .map(claimMapper::toDto)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -103,7 +88,10 @@ public class ClaimServiceImpl implements ClaimService {
         ClaimEntity claim = claimRepository.findById(claimId)
                 .orElseThrow(() -> new RuntimeException("Заявка не найдена: " + claimId));
 
-        claim.setStatus(ClaimStatus.valueOf(request.getStatus().toUpperCase()));
+        claim.setStatus(
+                ru.car.entity.claim.ClaimStatus.valueOf(request.getStatus())
+        );
+
         claim.setUpdatedAt(LocalDateTime.now());
 
         ClaimEntity updatedClaim = claimRepository.save(claim);
@@ -118,12 +106,8 @@ public class ClaimServiceImpl implements ClaimService {
 
         ClaimEntity claim = claimRepository.findById(claimId)
                 .orElseThrow(() -> new RuntimeException("Заявка не найдена: " + claimId));
-
-        MasterEntity master = new MasterEntity();
-        master.setId(masterId);
-        master.setFirstName("Мастер " + masterId);
-
-        claim.setMaster(master);
+        
+        claim.setMasterId(masterId);
         claim.setUpdatedAt(LocalDateTime.now());
 
         ClaimEntity updatedClaim = claimRepository.save(claim);
@@ -135,8 +119,6 @@ public class ClaimServiceImpl implements ClaimService {
     @Transactional
     public ClaimDto addWorkItem(Long claimId, WorkItemCreateRequest request) {
         log.info("Добавление работы в заявку {}", claimId);
-
-        // Пока просто возвращаем заявку
         return getClaim(claimId);
     }
 
@@ -144,8 +126,6 @@ public class ClaimServiceImpl implements ClaimService {
     @Transactional
     public ClaimDto addPart(Long claimId, PartRequest request) {
         log.info("Добавление запчасти в заявку {}", claimId);
-
-        // Пока просто возвращаем заявку
         return getClaim(claimId);
     }
 

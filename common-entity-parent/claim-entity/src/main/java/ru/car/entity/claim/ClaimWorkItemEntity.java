@@ -2,8 +2,6 @@ package ru.car.entity.claim;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import ru.car.entity.nsi.ServiceEntity;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,25 +16,40 @@ public class ClaimWorkItemEntity {
     @JoinColumn(name = "fk_claim", nullable = false)
     private ClaimEntity claim;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_service")
-    private ServiceEntity service;
+    // ЗАМЕНЯЕМ: вместо ServiceEntity используем Long
+    @Column(name = "service_id", nullable = false)
+    private Long serviceId;
 
-    @Column(name = "description")
+    @Column(name = "service_name", length = 200)
+    private String serviceName;
+
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "quantity")
-    private Integer quantity = 1;
+    @Column(name = "estimated_hours")
+    private Integer estimatedHours;
 
-    @Column(name = "unit_price")
-    private Double unitPrice;
+    @Column(name = "actual_hours")
+    private Integer actualHours;
 
-    @Column(name = "total_price")
-    private Double totalPrice;
+    @Column(name = "hourly_rate")
+    private Double hourlyRate;
 
-    @Column(name = "is_completed")
-    private Boolean isCompleted;
+    @Column(name = "total_cost")
+    private Double totalCost;
+
+    @Column(name = "status", length = 50)
+    private String status;
+
+    @Column(name = "completed_by")
+    private Long completedBy;
+
+    @Column(name = "completed_at")
+    private LocalDateTime completedAt;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

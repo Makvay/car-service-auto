@@ -1,7 +1,7 @@
 package ru.car.dto.claim;
 
 import lombok.Data;
-import ru.car.dto.nsi.ServiceDto;
+
 
 import java.time.LocalDateTime;
 
@@ -9,11 +9,21 @@ import java.time.LocalDateTime;
 public class ClaimWorkItemDto {
     private Long id;
     private ClaimDto claim;
-    private ServiceDto service;
-    private String description;
-    private Integer quantity;
-    private Double unitPrice;
-    private Double totalPrice;
-    private Boolean isCompleted;
+
+    // Заменяем ServiceDto на простые поля
+    private Long serviceId;
+    private String serviceCode;
+    private String serviceName;
+    private String serviceDescription;
+
+    private String comment;
+    private Integer estimatedHours;
+    private Integer actualHours;
+    private Double hourlyRate;
+    private Double totalCost;
+    private String status; // PLANNED, IN_PROGRESS, COMPLETED
+    private LocalDateTime startedAt;
+    private LocalDateTime completedAt;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

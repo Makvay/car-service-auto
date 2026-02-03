@@ -2,8 +2,7 @@ package ru.car.entity.master;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.car.entity.claim.ClaimEntity;
-import ru.car.entity.nsi.ServiceEntity;
+
 
 import java.time.LocalDateTime;
 
@@ -21,13 +20,16 @@ public class MasterWorkEntity {
     @JoinColumn(name = "fk_master", nullable = false)
     private MasterEntity master;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_claim", nullable = false)
-    private ClaimEntity claim;
+    // ЗАМЕНЯЕМ ClaimEntity на Long
+    @Column(name = "claim_id", nullable = false)
+    private Long claimId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_service")
-    private ServiceEntity service;
+    // ЗАМЕНЯЕМ ServiceEntity на Long
+    @Column(name = "service_id", nullable = false)
+    private Long serviceId;
+
+    @Column(name = "service_name", length = 200)
+    private String serviceName; // Копия названия услуги
 
     @Column(name = "start_time")
     private LocalDateTime startTime;
@@ -43,4 +45,7 @@ public class MasterWorkEntity {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

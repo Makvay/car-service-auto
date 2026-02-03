@@ -2,7 +2,6 @@ package ru.car.entity.client;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import ru.car.entity.nsi.CarStampEntity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -18,9 +17,15 @@ public class ClientCarEntity {
     @JoinColumn(name = "fk_client", nullable = false)
     private ClientEntity client;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_car_stamp")
-    private CarStampEntity carStamp;
+
+    @Column(name = "brand_id")
+    private Long brandId;
+
+    @Column(name = "brand_name", length = 100)
+    private String brandName;
+
+    @Column(name = "model_id")
+    private Long modelId;
 
     @Column(name = "model", length = 100)
     private String model;

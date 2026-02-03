@@ -3,21 +3,30 @@ package ru.car.dto.claim;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
+
+import java.time.LocalDate;
 
 
 @Data
 public class CreateClaimRequest {
-    @NotNull(message = "ID клиента обязательно")
+    @NotNull @Positive
     private Long clientId;
 
-    @NotNull(message = "ID автомобиля обязательно")
+    @NotNull @Positive
     private Long vehicleId;
 
-    @NotBlank(message = "Описание проблемы обязательно")
+    @NotNull
     private String problemDescription;
 
-    private Long masterId;
-    private String priority;
+    private String customerNotes;
+    private String internalNotes;
+
+    @NotNull @Positive
     private Integer mileageAtEntry;
+
+    private String priority;
+    private LocalDate scheduledDate;
+
 }

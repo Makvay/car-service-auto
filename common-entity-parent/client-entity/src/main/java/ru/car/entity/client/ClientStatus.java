@@ -1,4 +1,4 @@
-package ru.car.dto.client;
+package ru.car.entity.client;
 
 import lombok.Getter;
 

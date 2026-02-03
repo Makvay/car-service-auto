@@ -15,10 +15,7 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    implementation project(':common-dto-parent:client-dto')
-    implementation project(':common-dto-parent:master-dto')
-    implementation project(':common-dto-parent:warehouse-dto')
-    implementation project(':common-dto-parent:nsi-dto')
+
 
 
 

@@ -1,7 +1,7 @@
 package ru.car.dto.claim;
 
 import lombok.Data;
-import ru.car.dto.warehouse.PartDto;
+
 
 import java.time.LocalDateTime;
 
@@ -9,7 +9,10 @@ import java.time.LocalDateTime;
 public class ClaimPartDto {
     private Long id;
     private ClaimDto claim;
-    private PartDto part;
+    private Long partId;
+    private String partCode;
+    private String partName;
+    private String partCategory;
     private Integer quantity;
     private Double unitPrice;
     private Double totalPrice;

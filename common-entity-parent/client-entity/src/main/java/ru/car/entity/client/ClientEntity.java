@@ -2,12 +2,11 @@ package ru.car.entity.client;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.car.dto.client.ClientStatus;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 @Builder
 @Setter
 @Getter
@@ -32,9 +31,9 @@ public class ClientEntity implements Serializable {
     @Column(name = "email", unique = true, length = 255)
     private String email;
 
-    @Enumerated(EnumType.STRING)
+    // ЗАМЕНЯЕМ ClientStatus на String или создаем enum здесь же
     @Column(name = "status", nullable = false, length = 50)
-    private ClientStatus status;
+    private String status; // "ACTIVE", "INACTIVE", "BLOCKED"
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -50,4 +49,8 @@ public class ClientEntity implements Serializable {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ClientHistoryEntity> history = new ArrayList<>();
 
+    // Создаем enum прямо в этом классе (опционально)
+    public enum Status {
+        ACTIVE, INACTIVE, BLOCKED
+    }
 }

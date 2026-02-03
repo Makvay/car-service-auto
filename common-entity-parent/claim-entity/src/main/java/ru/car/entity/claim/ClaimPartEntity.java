@@ -2,8 +2,6 @@ package ru.car.entity.claim;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import ru.car.entity.warehouse.PartEntity;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,9 +16,14 @@ public class ClaimPartEntity {
     @JoinColumn(name = "fk_claim", nullable = false)
     private ClaimEntity claim;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_part", nullable = false)
-    private PartEntity part;
+    @Column(name = "part_id", nullable = false)
+    private Long partId;
+
+    @Column(name = "part_code", length = 100)
+    private String partCode;
+
+    @Column(name = "part_name", length = 200)
+    private String partName;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
@@ -30,6 +33,21 @@ public class ClaimPartEntity {
 
     @Column(name = "total_price")
     private Double totalPrice;
+
+    @Column(name = "status", length = 50)
+    private String status;
+
+    @Column(name = "notes", columnDefinition = "TEXT")
+    private String notes;
+
+    @Column(name = "reserved_at")
+    private LocalDateTime reservedAt;
+
+    @Column(name = "used_at")
+    private LocalDateTime usedAt;
+
+    @Column(name = "returned_at")
+    private LocalDateTime returnedAt;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
