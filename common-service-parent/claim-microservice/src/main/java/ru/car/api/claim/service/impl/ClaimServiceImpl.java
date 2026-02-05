@@ -2,13 +2,17 @@ package ru.car.api.claim.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.car.api.claim.mapper.ClaimMapper;
 import ru.car.api.claim.repository.ClaimRepository;
 import ru.car.api.claim.service.ClaimService;
+import ru.car.api.claim.spec.ClaimSpecification;
 import ru.car.dto.claim.*;
 import ru.car.entity.claim.ClaimEntity;
+import ru.car.dto.claim.ClaimSearchRequest;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -141,4 +145,54 @@ public class ClaimServiceImpl implements ClaimService {
         claimRepository.deleteById(id);
         log.info("Заявка {} удалена", id);
     }
+
+    @Override
+    public List<ClaimDto> searchClaims(ClaimSearchRequest searchRequest) {
+        log.info("Поиск заявок: {}", searchRequest);
+
+        // Преобразуем DTO enum в Entity enum
+        List<ru.car.entity.claim.ClaimStatus> entityStatuses = null;
+        if (searchRequest.getStatuses() != null) {
+            entityStatuses = searchRequest.getStatuses().stream()
+                    .map(status -> ru.car.entity.claim.ClaimStatus.valueOf(status.name()))
+                    .collect(Collectors.toList());
+        }
+
+        ru.car.entity.claim.ClaimPriority entityPriority = null;
+        if (searchRequest.getPriority() != null) {
+            entityPriority = ru.car.entity.claim.ClaimPriority.valueOf(
+                    searchRequest.getPriority().name());
+        }
+
+        Specification<ClaimEntity> spec = ClaimSpecification.withFilters(
+                searchRequest.getClientId(),
+                searchRequest.getVehicleId(),
+                searchRequest.getMasterId(),
+                entityStatuses,
+                entityPriority
+        );
+
+        List<ClaimEntity> claims = claimRepository.findAll(spec);
+
+        return claims.stream()
+                .map(claimMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

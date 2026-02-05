@@ -1,0 +1,122 @@
+1. Gateway Service (порт 8080) - Маршрутизация:
+Gateway → Client Service:    /api/clients/      → http://localhost:8082
+Gateway → Claim Service:     /api/claims/       → http://localhost:8081
+Gateway → Master Service:    /api/masters/      → http://localhost:8083
+Gateway → Warehouse Service: /api/warehouse/    → http://localhost:8084
+Gateway → Notification Service: /api/notifications/ → http://localhost:8085
+Gateway → NSI Service:       /api/nsi/          → http://localhost:8086
+
+//////////////////////////////////////////////////////
+
+2. Client Service (порт 8082) - Клиенты и автомобили:
+Принимает:
+
+POST /api/clients - создать клиента
+
+GET /api/clients/{id} - получить клиента
+
+POST /api/vehicles - добавить автомобиль
+
+GET /api/clients/{id}/vehicles - авто клиента
+
+Отправляет события в Kafka:
+
+client.registered - клиент зарегистрирован
+
+vehicle.registered - авто зарегистрировано
+
+mileage.updated - обновлен пробег
+
+//////////////////////////////////////////////////////
+
+3. Claim Service (порт 8081) - Заявки на обслуживание:
+
+Принимает:
+
+POST /api/claims - создать заявку
+
+GET /api/claims/{id} - получить заявку
+
+PUT /api/claims/{id}/status - изменить статус
+
+
+Вызывает другие сервисы:
+
+→ Client Service: GET /api/clients/{id} (получить данные клиента)
+
+→ Client Service: GET /api/vehicles/{id} (получить данные авто)
+
+Отправляет события в Kafka:
+
+claim.created - создана заявка
+
+claim.status.changed - изменен статус
+
+claim.assigned.to.master - назначен мастер
+
+//////////////////////////////////////////////////////
+
+Master Service (порт 8083) - Мастера:
+GET /api/masters - список мастеров
+
+GET /api/masters/{id}/schedule - график мастера
+
+Слушает Kafka:
+
+claim.created → назначает свободного мастера
+
+claim.assigned.to.master → обновляет свой график
+
+Отправляет события:
+
+master.assigned - мастер назначен на заявку
+
+work.started - начаты работы
+
+work.completed - работы завершены
+
+//////////////////////////////////////////////////////
+Warehouse Service (порт 8084) - Склад:
+принимает:
+
+POST /api/warehouse/reservations - резервировать запчасти
+
+GET /api/warehouse/parts - список запчастей
+
+
+Слушает Kafka:
+
+claim.created → проверяет наличие запчастей
+
+work.started → резервирует запчасти
+
+Отправляет события:
+
+parts.reserved - запчасти зарезервированы
+
+parts.used - запчасти использованы
+
+stock.low - низкий остаток на складе
+
+//////////////////////////////////////////////////////
+6. Notification Service (порт 8085) - Уведомления:
+Слушает ВСЕ события Kafka и отправляет уведомления:
+
+client.registered → SMS: "Добро пожаловать!"
+
+claim.created → Email: "Ваша заявка создана"
+
+claim.status.changed → SMS: "Статус заявки изменен"
+
+work.completed → SMS: "Ваш автомобиль готов"
+
+//////////////////////////////////////////////////////
+
+7. NSI Service (порт 8086) - Справочники:
+Принимает: (только чтение)
+
+GET /api/nsi/vehicle-brands - марки авто
+
+GET /api/nsi/services - виды услуг
+
+GET /api/nsi/part-categories - категории запчастей

@@ -16,7 +16,6 @@ public class ClaimWorkItemEntity {
     @JoinColumn(name = "fk_claim", nullable = false)
     private ClaimEntity claim;
 
-    // ЗАМЕНЯЕМ: вместо ServiceEntity используем Long
     @Column(name = "service_id", nullable = false)
     private Long serviceId;
 

@@ -119,15 +119,12 @@ public class ClaimEntity {
     @Column(name = "claim_number", unique = true)
     private String claimNumber;
 
-    // ЗАМЕНЯЕМ: вместо ClientEntity используем Long
     @Column(name = "client_id", nullable = false)
     private Long clientId;
 
-    // ЗАМЕНЯЕМ: вместо ClientCarEntity используем Long
     @Column(name = "vehicle_id", nullable = false)
     private Long vehicleId;
 
-    // ЗАМЕНЯЕМ: вместо MasterEntity используем Long (может быть null)
     @Column(name = "master_id")
     private Long masterId;
 

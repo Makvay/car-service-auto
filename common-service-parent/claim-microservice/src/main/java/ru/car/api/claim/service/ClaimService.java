@@ -1,10 +1,6 @@
 package ru.car.api.claim.service;
 
-import ru.car.dto.claim.ClaimDto;
-import ru.car.dto.claim.CreateClaimRequest;
-import ru.car.dto.claim.ClaimStatusUpdateRequest;
-import ru.car.dto.claim.WorkItemCreateRequest;
-import ru.car.dto.claim.PartRequest;
+import ru.car.dto.claim.*;
 
 import java.util.List;
 
@@ -16,6 +12,8 @@ public interface ClaimService {
     List<ClaimDto> getClientClaims(Long clientId);
 
     List<ClaimDto> getAllClaims(String status, Long masterId, Boolean isPaid);
+
+    List<ClaimDto> searchClaims(ClaimSearchRequest searchRequest);
 
     ClaimDto updateClaimStatus(Long claimId, ClaimStatusUpdateRequest request);
 

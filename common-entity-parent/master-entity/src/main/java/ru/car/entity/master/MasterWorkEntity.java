@@ -24,7 +24,8 @@ public class MasterWorkEntity {
     @Column(name = "claim_id", nullable = false)
     private Long claimId;
 
-    // ЗАМЕНЯЕМ ServiceEntity на Long
+    // ЗАМЕНЯЕМ
+    // ServiceEntity на Long
     @Column(name = "service_id", nullable = false)
     private Long serviceId;
 
