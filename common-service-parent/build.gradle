@@ -5,7 +5,7 @@ plugins {
 //    id 'com.gorylenko.gradle-git-properties' version '2.4.1' apply false
 }
 
-group 'common-microservice-parrent'
+group 'common-microservice-parent'
 version "${System.getenv('MICROSERVICE_VERSION') != null ? System.getenv('MICROSERVICE_VERSION') : '0.0.1'}"
 
 ext {

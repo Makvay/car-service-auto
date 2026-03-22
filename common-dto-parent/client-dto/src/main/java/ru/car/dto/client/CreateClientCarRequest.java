@@ -13,7 +13,6 @@ public class CreateClientCarRequest {
     @NotBlank(message = "VIN номер обязателен")
     @Pattern(regexp = "^[A-HJ-NPR-Z0-9]{17}$", message = "Неверный формат VIN")
     private String vin;
-
     private String brand;
     private String model;
     private Integer year;

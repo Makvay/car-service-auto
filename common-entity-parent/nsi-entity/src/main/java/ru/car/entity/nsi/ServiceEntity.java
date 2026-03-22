@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import java.math.BigDecimal;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -31,10 +31,13 @@ public class ServiceEntity implements Serializable {
     private String description;
 
     @Column(name = "standard_price", nullable = false, precision = 10, scale = 2)
-    private Double standardPrice;
+    private BigDecimal standardPrice;
 
     @Column(name = "standard_duration_min", nullable = false)
     private Integer standardDurationMin;
+
+    @Column(name = "category_id")
+    private Long categoryId;
 
     @Column(name = "is_active")
     private Boolean isActive;

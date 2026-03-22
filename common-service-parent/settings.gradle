@@ -1,0 +1,10 @@
+rootProject.name = 'common-service-parent'
+
+
+include 'nsi-microservice'
+ include 'client-service'
+ include 'claim-service'
+ include 'master-service'
+ include 'warehouse-service'
+ include 'notification-service'
+ include 'gateway-service'

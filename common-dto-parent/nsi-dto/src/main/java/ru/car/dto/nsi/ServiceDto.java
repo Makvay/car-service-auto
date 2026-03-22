@@ -1,6 +1,8 @@
 package ru.car.dto.nsi;
 
 import lombok.Data;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -9,8 +11,9 @@ public class ServiceDto {
     private String code;
     private String name;
     private String description;
-    private Double standardPrice;
-    private Integer standardDurationMin;
+    private BigDecimal price;
+    private Integer durationMinutes;
+    private Long categoryId;
     private Boolean isActive;
     private LocalDateTime createdAt;
 }

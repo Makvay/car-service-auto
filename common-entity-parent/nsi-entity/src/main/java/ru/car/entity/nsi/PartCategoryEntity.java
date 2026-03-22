@@ -3,7 +3,8 @@ package ru.car.entity.nsi;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
-
+@Setter
+@Getter
 @Entity
 @Table(name = "part_categories", schema = "nsi")
 @Data

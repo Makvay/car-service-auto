@@ -82,9 +82,9 @@
 //    @Column(name = "updated_at")
 //    private LocalDateTime updatedAt;
 //
-////    @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-////    private List<ClaimStatusHistoryEntity> statusHistory = new ArrayList<>();
-////
+//   @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<ClaimStatusHistoryEntity> statusHistory = new ArrayList<>();
+//
 //    @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    private List<ClaimWorkItemEntity> workItems = new ArrayList<>();
 //
