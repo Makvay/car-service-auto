@@ -16,6 +16,8 @@ import ru.car.api.warehouse.repository.ClientCarRepository;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -81,11 +83,30 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<ClientCarDto> getClientVehicles(Long clientId) {
-        return List.of();
+        log.info("Получить авто клиента {}" , clientId);
+
+        List<ClientCarEntity> cars = clientCarRepository.findByClientId(clientId);
+        return cars.stream()
+                .map(clientCarMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public ClientCarDto updateMileage(Long vehicleId, Integer mileage) {
-        return null;
+        log.info("Обновление пробега машины {} на {}", vehicleId, mileage);
+
+         ClientCarEntity car = clientCarRepository.findById(vehicleId)
+                .orElseThrow(()-> new RuntimeException("Автомобиль не найден: " + vehicleId));
+
+         car.setMileage(mileage);
+         ClientCarEntity updateCar = clientCarRepository.save(car);
+
+         // Kafka
+        MileageUpdatedEvent event = new MileageUpdatedEvent(updateCar.getId(), updateCar.getMileage());
+        kafkaProducer.send("mileage.updated", event);
+
+        log.info("Пробег обновлен для машины {}: {}", vehicleId, mileage);
+        return clientCarMapper.toDto(updateCar);
+
     }
 }

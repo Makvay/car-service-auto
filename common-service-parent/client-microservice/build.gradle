@@ -14,10 +14,53 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // Kafka
+    implementation 'org.springframework.kafka:spring-kafka'
 
-    compileOnly 'org.projectlombok:lombok:1.18.30'
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
-    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+    // Database
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // Entity модули
+    implementation project(':common-entity-parent:claim-entity')
+    implementation project(':common-entity-parent:client-entity')
+    implementation project(':common-entity-parent:master-entity')
+    implementation project(':common-entity-parent:notification-entity')
+    implementation project(':common-entity-parent:nsi-entity')
+    implementation project(':common-entity-parent:warehouse-entity')
+
+    // DTO модули
+    implementation project(':common-dto-parent:claim-dto')
+    implementation project(':common-dto-parent:client-dto')
+    implementation project(':common-dto-parent:master-dto')
+    implementation project(':common-dto-parent:notification-dto')
+    implementation project(':common-dto-parent:nsi-dto')
+    implementation project(':common-dto-parent:warehouse-dto')
+
+    // MapStruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    //  Lombok + MapStruct
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
+    // Spring Boot Starter Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+
+    //  Swagger / OpenAPI
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += [
+            '-Amapstruct.defaultComponentModel=spring',
+            '-Amapstruct.unmappedTargetPolicy=IGNORE'
+    ]
 }
 
 test {
