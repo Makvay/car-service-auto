@@ -1,5 +1,16 @@
-rootProject.name = 'car-service-auto'
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
 
+    plugins {
+        id 'org.springframework.boot' version '3.3.4'
+        id 'io.spring.dependency-management' version '1.1.6'
+    }
+}
+
+rootProject.name = 'car-service-auto'
 
 include 'common-dto-parent:client-dto'
 include 'common-dto-parent:claim-dto'
@@ -18,10 +29,7 @@ include 'common-entity-parent:notification-entity'
 include 'common-service-parent:client-microservice'
 include 'common-service-parent:claim-microservice'
 include 'common-service-parent:master-microservice'
-include 'common-service-parent:warehouse-microservice'
 include 'common-service-parent:nsi-microservice'
 include 'common-service-parent:notification-microservice'
-
-
-
-
+include 'common-service-parent:gateway-service'
+include 'common-service-parent:warehouse-microservice'

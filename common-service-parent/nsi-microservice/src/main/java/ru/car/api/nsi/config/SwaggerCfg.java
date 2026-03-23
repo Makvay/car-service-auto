@@ -9,6 +9,6 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerCfg {
     @Bean
     public OpenAPI customOpenApi() {
-        return new OpenAPI().info(new Info().title("Справочники").description("Апи").version("1.0"));
+        return new OpenAPI().info(new Info().title("Справочники").description("API справочников (марки авто, услуги, категории запчастей)").version("1.0"));
     }
 }

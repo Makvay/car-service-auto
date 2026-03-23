@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
 }
 
 group = 'com.pm'
@@ -10,52 +12,55 @@ repositories {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    // Kafka
-    implementation 'org.springframework.kafka:spring-kafka'
-
-    // Database
-    runtimeOnly 'org.postgresql:postgresql'
-
-
-    // Entity модули
     implementation project(':common-entity-parent:claim-entity')
     implementation project(':common-entity-parent:client-entity')
     implementation project(':common-entity-parent:master-entity')
+    implementation project(':common-entity-parent:notification-entity')
+    implementation project(':common-entity-parent:nsi-entity')
+    implementation project(':common-entity-parent:warehouse-entity')
 
-    // DTO модули
     implementation project(':common-dto-parent:claim-dto')
     implementation project(':common-dto-parent:client-dto')
     implementation project(':common-dto-parent:master-dto')
+    implementation project(':common-dto-parent:notification-dto')
     implementation project(':common-dto-parent:nsi-dto')
     implementation project(':common-dto-parent:warehouse-dto')
 
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.kafka:spring-kafka'
 
-    // MapStruct
-    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
+    // Database
+    runtimeOnly 'org.postgresql:postgresql'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    //  Lombok + MapStruct
-    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    // MapStruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
+    // Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
-
-}
-tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs += [
-            '-Amapstruct.defaultComponentModel=spring',
-            '-Amapstruct.unmappedTargetPolicy=IGNORE'
-    ]
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+bootJar {
+    enabled = true
+    mainClass = 'ru.car.api.claim.ClaimApplication'
+}
 
+jar {
+    enabled = false
+}
 
 test {
     useJUnitPlatform()

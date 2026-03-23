@@ -18,11 +18,16 @@ public class ReservationEntity {
     @Column(name = "reservation_number", nullable = false, unique = true, length = 50)
     private String reservationNumber;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "part_id", nullable = false)
+    private PartEntity part;
+
+
+    // @Column(name = "part_id", nullable = false)
+    // private Long partId;
+
     @Column(name = "claim_id", nullable = false)
     private Long claimId;
-
-    @Column(name = "part_id", nullable = false)
-    private Long partId;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;

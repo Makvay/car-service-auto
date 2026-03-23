@@ -10,23 +10,27 @@ repositories {
 }
 
 dependencies {
-
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.1.5'
-    implementation project(':common-dto-parent:client-dto')
-    implementation project(':common-entity-parent:nsi-entity')
+    // Hibernate (нужен для JdbcTypeCode и других Hibernate-специфичных аннотаций)
+    implementation 'org.hibernate.orm:hibernate-core:6.3.1.Final'
+
+    // JPA API
     implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
 
+    // Jackson для JSON типов
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2'
+
+    implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+    implementation project(':common-dto-parent:client-dto')
 
     // Lombok
-    implementation 'org.projectlombok:lombok:1.18.30'
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
-
-
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
 }
 
 test {

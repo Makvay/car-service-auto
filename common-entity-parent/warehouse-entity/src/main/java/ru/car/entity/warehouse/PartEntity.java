@@ -25,6 +25,10 @@ public class PartEntity {
     @Column(name = "name", nullable = false, length = 255)
     private String name;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_part_id")
+    private PartEntity part;
+
     @Column(name = "description")
     private String description;
 
@@ -54,9 +58,11 @@ public class PartEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "part", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "part_id")
     private List<InventoryEntity> inventory = new ArrayList<>();
 
-    @OneToMany(mappedBy = "part", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "part_id")
     private List<ReservationEntity> reservations = new ArrayList<>();
 }

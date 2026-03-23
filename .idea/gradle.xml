@@ -4,9 +4,8 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="C:\Gradle\gradle-9.2.1" />
+        <option name="gradleJvm" value="17" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -27,6 +26,7 @@
             <option value="$PROJECT_DIR$/common-service-parent" />
             <option value="$PROJECT_DIR$/common-service-parent/claim-microservice" />
             <option value="$PROJECT_DIR$/common-service-parent/client-microservice" />
+            <option value="$PROJECT_DIR$/common-service-parent/gateway-service" />
             <option value="$PROJECT_DIR$/common-service-parent/master-microservice" />
             <option value="$PROJECT_DIR$/common-service-parent/notification-microservice" />
             <option value="$PROJECT_DIR$/common-service-parent/nsi-microservice" />
