@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SupplyService {
     SupplyDto updateStatus(Long id, String status);
-    List<SupplyDto> getByStatus(String status);
+    SupplyDto getByStatus(Long id);
 
 }
