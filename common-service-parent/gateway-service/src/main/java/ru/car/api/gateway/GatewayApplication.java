@@ -13,7 +13,7 @@ import org.springframework.context.annotation.FilterType;
         DataSourceAutoConfiguration.class,
         DataSourceTransactionManagerAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class,
-        KafkaAutoConfiguration.class  // Exclude Kafka if present
+        KafkaAutoConfiguration.class
 })
 
 @ComponentScan(excludeFilters = {
