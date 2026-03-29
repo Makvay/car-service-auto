@@ -173,7 +173,6 @@ public class ClaimServiceImpl implements ClaimService {
         );
 
         List<ClaimEntity> claims = claimRepository.findAll(spec);
-
         return claims.stream()
                 .map(claimMapper::toDto)
                 .collect(Collectors.toList());

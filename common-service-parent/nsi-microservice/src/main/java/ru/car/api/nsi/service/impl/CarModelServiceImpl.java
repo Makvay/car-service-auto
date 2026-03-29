@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 public class CarModelServiceImpl implements CarModelService {
 
     private final CarModelRepository carModelRepository;
-    private final CarStampRepository carStampRepository;
     private final CarModelMapper carModelMapper;
 
     @Override
