@@ -52,17 +52,17 @@ public class PartServiceImpl implements PartService {
     }
 
     @Override
-    public PartDto update(Long id, PartDto dto) {
+    public PartDto update(Long id, CreatePartRequest request) {
         log.info("Обновить данные товара с ID: {}", id);
 
         PartEntity part = partRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Error - товар не найден: " + id));
 
-        part.setName(dto.getName());
-        part.setUnitPrice(dto.getUnitPrice());
-        part.setCostPrice(dto.getCostPrice());
-        part.setDescription(dto.getDescription());
-        part.setBrand(dto.getBrand());
+        part.setName(request.getName());
+        part.setUnitPrice(request.getUnitPrice());
+        part.setCostPrice(request.getCostPrice());
+        part.setDescription(request.getDescription());
+        part.setBrand(request.getBrand());
 
         PartEntity updatePart = partRepository.save(part);
 

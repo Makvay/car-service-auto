@@ -11,6 +11,6 @@ public interface PartService {
     PartDto create(CreatePartRequest request);
     PartDto getById(Long id);
     List<PartDto> getAll();
-    PartDto update(Long id, PartDto dto);
+    PartDto update(Long id, CreatePartRequest request);
     void delete(Long id);
 }

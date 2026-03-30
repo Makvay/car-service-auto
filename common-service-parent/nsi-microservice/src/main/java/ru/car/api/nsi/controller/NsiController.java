@@ -33,7 +33,7 @@ public class NsiController {
         return Map.of("status", "UP", "service", "NSI Service");
     }
 
-    // ✅ Марки авто - GET /api/nsi/vehicle-brands
+    // Марки авто - GET /api/nsi/vehicle-brands
     @GetMapping("/vehicle-brands")
     @Operation(summary = "Получить все марки автомобилей")
     public List<CarStampDto> getAllBrands() {
@@ -46,7 +46,7 @@ public class NsiController {
         return carStampService.getById(id);
     }
 
-    // ✅ Услуги - GET /api/nsi/services
+    // Услуги - GET /api/nsi/services
     @GetMapping("/services")
     @Operation(summary = "Получить все виды услуг")
     public List<ServiceDto> getAllServices() {
@@ -65,7 +65,7 @@ public class NsiController {
         return serviceService.getByCategoryId(categoryId);
     }
 
-    // ✅ Категории запчастей - GET /api/nsi/part-categories
+    //  Категории запчастей - GET /api/nsi/part-categories
     @GetMapping("/part-categories")
     @Operation(summary = "Получить все категории запчастей")
     public List<PartCategoryDto> getAllPartCategories() {

@@ -28,11 +28,8 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationMapper.toDto(saved);
     }
 
-
-
     @Override
     public List<ReservationDto> getByClaimId(Long ClaimId) {
-
         List<ReservationEntity> reservations = reservationRepository.findByClaimId(ClaimId);
         return reservationMapper.toDtoList(reservations);
     }
