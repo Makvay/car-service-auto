@@ -27,13 +27,14 @@ public class PartsController {
 
     private final PartService partService;
 
-    @PostMapping
-    @Operation(summary = "Создать товар")
+
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Товар создан"),
             @ApiResponse(responseCode = "400", description = "Неверные данные"),
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
     })
+    @PostMapping
+    @Operation(summary = "Создать товар")
     public ResponseEntity<PartDto> create (@RequestBody CreatePartRequest request) {
         return ResponseEntity.ok(partService.create(request));
     }
@@ -59,7 +60,6 @@ public class PartsController {
         return partService.getAll();
     }
 
-
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Данные обновлены"),
             @ApiResponse(responseCode = "404", description = "Товар не найден"),
@@ -74,13 +74,16 @@ public class PartsController {
         return ResponseEntity.ok(partService.update(id, request));
     }
 
-
-
-
-
-
-
-
-
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Товар удалён"),
+            @ApiResponse(responseCode = "404", description = "Товар не найден"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Удалить товар")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        partService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }
