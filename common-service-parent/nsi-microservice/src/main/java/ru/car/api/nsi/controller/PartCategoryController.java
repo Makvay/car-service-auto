@@ -1,8 +1,11 @@
 package ru.car.api.nsi.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.car.api.nsi.service.PartCategoryService;
 import ru.car.dto.nsi.PartCategoryDto;
@@ -17,39 +20,65 @@ public class PartCategoryController {
 
     private final PartCategoryService partCategoryService;
 
-    @GetMapping("/{id}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Категория найдена"),
+            @ApiResponse(responseCode = "404", description = "Категория не найдена"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить категорию запчастей по ID")
-    public PartCategoryDto getById(@PathVariable Long id) {
-        return partCategoryService.getById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<PartCategoryDto> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(partCategoryService.getById(id));
     }
 
-    @GetMapping("/code/{code}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Категория найдена"),
+            @ApiResponse(responseCode = "404", description = "Категория не найдена"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить категорию запчастей по коду")
-    public PartCategoryDto getByCode(@PathVariable String code) {
-        return partCategoryService.getByCode(code);
+    @GetMapping("/code/{code}")
+    public ResponseEntity<PartCategoryDto> getByCode(@PathVariable String code) {
+        return ResponseEntity.ok(partCategoryService.getByCode(code));
     }
 
-    @GetMapping("/root")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список корневых категорий"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить корневые категории")
-    public List<PartCategoryDto> getRootCategories() {
-        return partCategoryService.getRootCategories();
+    @GetMapping("/root")
+    public ResponseEntity<List<PartCategoryDto>> getRootCategories() {
+        return ResponseEntity.ok(partCategoryService.getRootCategories());
     }
 
-    @GetMapping("/{parentId}/children")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список дочерних категорий"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить дочерние категории")
-    public List<PartCategoryDto> getChildren(@PathVariable Long parentId) {
-        return partCategoryService.getByParentId(parentId);
+    @GetMapping("/{parentId}/children")
+    public ResponseEntity<List<PartCategoryDto>> getChildren(@PathVariable Long parentId) {
+        return ResponseEntity.ok(partCategoryService.getByParentId(parentId));
     }
 
-    @GetMapping
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список категорий"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить все категории")
-    public List<PartCategoryDto> getAll() {
-        return partCategoryService.getAll();
+    @GetMapping
+    public ResponseEntity<List<PartCategoryDto>> getAll() {
+        return ResponseEntity.ok(partCategoryService.getAll());
     }
 
-    @GetMapping("/active")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список активных категорий"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить все активные категории")
-    public List<PartCategoryDto> getAllActive() {
-        return partCategoryService.getAllActive();
+    @GetMapping("/active")
+    public ResponseEntity<List<PartCategoryDto>> getAllActive() {
+        return ResponseEntity.ok(partCategoryService.getAllActive());
     }
 }

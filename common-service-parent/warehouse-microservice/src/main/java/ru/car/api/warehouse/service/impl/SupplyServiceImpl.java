@@ -10,6 +10,8 @@ import ru.car.api.warehouse.service.SupplyService;
 import ru.car.dto.warehouse.SupplyDto;
 import ru.car.entity.warehouse.SupplyEntity;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -34,13 +36,33 @@ public class SupplyServiceImpl implements SupplyService {
     }
 
     @Override
-    public SupplyDto getByStatus(Long id) {
-        log.info("Получить поставку с ID: {}", id);
+    public SupplyDto getByStatus(Long id, String status) {
+        log.info("Получить поставку с ID: {}, статус: {}", id, status);
 
         SupplyEntity supply = supplyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Not found"));
 
+        // Проверяем статус
+        if(!supply.getStatus().equals(status)) {
+            throw new RuntimeException("Статус не соответствует: " + status);
+        }
+
         return supplyMapper.toDto(supply);
+    }
+
+    @Override
+    public SupplyDto getById(Long id) {
+
+        SupplyEntity supply = supplyRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Not found"));
+
+        return supplyMapper.toDto(supply);
+    }
+
+    @Override
+    public List<SupplyDto> getAll() {
+        log.info("Получить всё");
+        return supplyMapper.toDtoList(supplyRepository.findAll());
     }
 
 }

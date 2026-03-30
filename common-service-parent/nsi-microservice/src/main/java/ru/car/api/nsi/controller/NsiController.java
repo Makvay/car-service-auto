@@ -1,12 +1,12 @@
 package ru.car.api.nsi.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import ru.car.api.nsi.service.CarStampService;
 import ru.car.api.nsi.service.PartCategoryService;
 import ru.car.api.nsi.service.ServiceService;
@@ -27,66 +27,106 @@ public class NsiController {
     private final ServiceService serviceService;
     private final PartCategoryService partCategoryService;
 
-    @GetMapping("/health")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Сервис работает"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Проверка здоровья сервиса")
-    public Map<String, String> health() {
-        return Map.of("status", "UP", "service", "NSI Service");
+    @GetMapping("/health")
+    public ResponseEntity<Map<String, String>> health() {
+        return ResponseEntity.ok(Map.of("status", "UP", "service", "NSI Service"));
     }
 
-    // Марки авто - GET /api/nsi/vehicle-brands
-    @GetMapping("/vehicle-brands")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список марок автомобилей"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить все марки автомобилей")
-    public List<CarStampDto> getAllBrands() {
-        return carStampService.getAllActive();
+    @GetMapping("/vehicle-brands")
+    public ResponseEntity<List<CarStampDto>> getAllBrands() {
+        return ResponseEntity.ok(carStampService.getAllActive());
     }
 
-    @GetMapping("/vehicle-brands/{id}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Марка найдена"),
+            @ApiResponse(responseCode = "404", description = "Марка не найдена"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить марку авто по ID")
-    public CarStampDto getBrandById(@PathVariable Long id) {
-        return carStampService.getById(id);
+    @GetMapping("/vehicle-brands/{id}")
+    public ResponseEntity<CarStampDto> getBrandById(@PathVariable Long id) {
+        return ResponseEntity.ok(carStampService.getById(id));
     }
 
-    // Услуги - GET /api/nsi/services
-    @GetMapping("/services")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список услуг"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить все виды услуг")
-    public List<ServiceDto> getAllServices() {
-        return serviceService.getAllActive();
+    @GetMapping("/services")
+    public ResponseEntity<List<ServiceDto>> getAllServices() {
+        return ResponseEntity.ok(serviceService.getAllActive());
     }
 
-    @GetMapping("/services/{id}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Услуга найдена"),
+            @ApiResponse(responseCode = "404", description = "Услуга не найдена"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить услугу по ID")
-    public ServiceDto getServiceById(@PathVariable Long id) {
-        return serviceService.getById(id);
+    @GetMapping("/services/{id}")
+    public ResponseEntity<ServiceDto> getServiceById(@PathVariable Long id) {
+        return ResponseEntity.ok(serviceService.getById(id));
     }
 
-    @GetMapping("/services/category/{categoryId}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список услуг"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить услуги по категории")
-    public List<ServiceDto> getServicesByCategory(@PathVariable Long categoryId) {
-        return serviceService.getByCategoryId(categoryId);
+    @GetMapping("/services/category/{categoryId}")
+    public ResponseEntity<List<ServiceDto>> getServicesByCategory(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(serviceService.getByCategoryId(categoryId));
     }
 
-    //  Категории запчастей - GET /api/nsi/part-categories
-    @GetMapping("/part-categories")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список категорий запчастей"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить все категории запчастей")
-    public List<PartCategoryDto> getAllPartCategories() {
-        return partCategoryService.getAllActive();
+    @GetMapping("/part-categories")
+    public ResponseEntity<List<PartCategoryDto>> getAllPartCategories() {
+        return ResponseEntity.ok(partCategoryService.getAllActive());
     }
 
-    @GetMapping("/part-categories/{id}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Категория найдена"),
+            @ApiResponse(responseCode = "404", description = "Категория не найдена"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить категорию запчастей по ID")
-    public PartCategoryDto getPartCategoryById(@PathVariable Long id) {
-        return partCategoryService.getById(id);
+    @GetMapping("/part-categories/{id}")
+    public ResponseEntity<PartCategoryDto> getPartCategoryById(@PathVariable Long id) {
+        return ResponseEntity.ok(partCategoryService.getById(id));
     }
 
-    @GetMapping("/part-categories/root")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список корневых категорий"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить корневые категории запчастей")
-    public List<PartCategoryDto> getRootCategories() {
-        return partCategoryService.getRootCategories();
+    @GetMapping("/part-categories/root")
+    public ResponseEntity<List<PartCategoryDto>> getRootCategories() {
+        return ResponseEntity.ok(partCategoryService.getRootCategories());
     }
 
-    @GetMapping("/part-categories/{parentId}/children")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список дочерних категорий"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить дочерние категории")
-    public List<PartCategoryDto> getChildCategories(@PathVariable Long parentId) {
-        return partCategoryService.getByParentId(parentId);
+    @GetMapping("/part-categories/{parentId}/children")
+    public ResponseEntity<List<PartCategoryDto>> getChildCategories(@PathVariable Long parentId) {
+        return ResponseEntity.ok(partCategoryService.getByParentId(parentId));
     }
 }

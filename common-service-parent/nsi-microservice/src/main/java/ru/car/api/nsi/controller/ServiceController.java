@@ -1,8 +1,11 @@
 package ru.car.api.nsi.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.car.api.nsi.service.ServiceService;
 import ru.car.dto.nsi.ServiceDto;
@@ -17,27 +20,44 @@ public class ServiceController {
 
     private final ServiceService serviceService;
 
-    @GetMapping("/{id}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Услуга найдена"),
+            @ApiResponse(responseCode = "404", description = "Услуга не найдена"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить услугу по ID")
-    public ServiceDto getById(@PathVariable Long id) {
-        return serviceService.getById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<ServiceDto> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(serviceService.getById(id));
     }
 
-    @GetMapping("/category/{categoryId}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список услуг"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить услуги по категории")
-    public List<ServiceDto> getByCategoryId(@PathVariable Long categoryId) {
-        return serviceService.getByCategoryId(categoryId);
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<ServiceDto>> getByCategoryId(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(serviceService.getByCategoryId(categoryId));
     }
 
-    @GetMapping
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список услуг"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить все услуги")
-    public List<ServiceDto> getAll() {
-        return serviceService.getAll();
+    @GetMapping
+    public ResponseEntity<List<ServiceDto>> getAll() {
+        return ResponseEntity.ok(serviceService.getAll());
     }
 
-    @GetMapping("/active")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список активных услуг"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
     @Operation(summary = "Получить все активные услуги")
-    public List<ServiceDto> getAllActive() {
-        return serviceService.getAllActive();
+    @GetMapping("/active")
+    public ResponseEntity<List<ServiceDto>> getAllActive() {
+        return ResponseEntity.ok(serviceService.getAllActive());
     }
 }
