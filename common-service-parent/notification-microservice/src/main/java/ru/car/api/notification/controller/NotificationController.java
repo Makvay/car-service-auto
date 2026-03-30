@@ -1,5 +1,9 @@
 package ru.car.api.notification.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,29 +13,34 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.car.api.notification.service.NotificationService;
 import ru.car.dto.notification.NotificationDto;
 
-
 import java.util.List;
-
-//GET /api/notifications - все уведомления
-//GET /api/notifications/client/{clientId} - уведомления клиента
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/notification")
+@Tag(name = "Notification", description = "Уведомления")
 public class NotificationController {
 
     private final NotificationService notificationService;
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список уведомлений"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
+    @Operation(summary = "Получить все уведомления")
     @GetMapping
-    public List<NotificationDto> findAll() {
-        return notificationService.getAll();
+    public ResponseEntity<List<NotificationDto>> findAll() {
+        return ResponseEntity.ok(notificationService.getAll());
     }
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Список уведомлений клиента"),
+            @ApiResponse(responseCode = "404", description = "Клиент не найден"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
+    @Operation(summary = "Получить уведомления клиента")
     @GetMapping("/client/{clientId}")
-    public List<NotificationDto> findById(@PathVariable Long clientId) {
-        return notificationService.getByClientId(clientId);
-
+    public ResponseEntity<List<NotificationDto>> findByClientId(@PathVariable Long clientId) {
+        return ResponseEntity.ok(notificationService.getByClientId(clientId));
     }
-
-
 }
