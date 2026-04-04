@@ -1,0 +1,42 @@
+-- V2__init_tables.sql
+CREATE TABLE IF NOT EXISTS nsi.car_stamp (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    code VARCHAR(50) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    country VARCHAR(100),
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS nsi.car_model (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    fk_car_stamp BIGINT NOT NULL,
+    code VARCHAR(50) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    production_years VARCHAR(50),
+    vehicle_type VARCHAR(50),
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS nsi.services (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    code VARCHAR(50) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    standard_price NUMERIC(10,2) NOT NULL,
+    standard_duration_min INTEGER NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    category_id BIGINT
+);
+
+CREATE TABLE IF NOT EXISTS nsi.part_categories (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    code VARCHAR(50) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    fk_parent_category BIGINT,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    parent_id BIGINT
+);

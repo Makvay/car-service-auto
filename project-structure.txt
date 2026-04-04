@@ -1,0 +1,1166 @@
+Структура папок
+Серийный номер тома: 70AC-165C
+C:.
+|   .gitignore
+|   build.gradle
+|   dox
+|   gradlew
+|   gradlew.bat
+|   project-structure.txt
+|   settings.gradle
+|   
++---.gradle
+|   |   file-system.probe
+|   |   
+|   +---9.2.1
+|   |   |   gc.properties
+|   |   |   
+|   |   +---checksums
+|   |   |       checksums.lock
+|   |   |       md5-checksums.bin
+|   |   |       sha1-checksums.bin
+|   |   |       
+|   |   +---executionHistory
+|   |   |       executionHistory.bin
+|   |   |       executionHistory.lock
+|   |   |       
+|   |   +---expanded
+|   |   +---fileChanges
+|   |   |       last-build.bin
+|   |   |       
+|   |   +---fileHashes
+|   |   |       fileHashes.bin
+|   |   |       fileHashes.lock
+|   |   |       resourceHashesCache.bin
+|   |   |       
+|   |   \---vcsMetadata
+|   +---buildOutputCleanup
+|   |       buildOutputCleanup.lock
+|   |       cache.properties
+|   |       outputFiles.bin
+|   |       
+|   \---vcs-1
+|           gc.properties
+|           
++---.idea
+|   |   .gitignore
+|   |   compiler.xml
+|   |   dataSources.local.xml
+|   |   dataSources.xml
+|   |   data_source_mapping.xml
+|   |   gradle.xml
+|   |   misc.xml
+|   |   modules.xml
+|   |   sqldialects.xml
+|   |   vcs.xml
+|   |   workspace.xml
+|   |   
+|   +---dataSources
+|   |   |   5da81221-e300-4be3-896b-a32fd1b40c00.xml
+|   |   |   
+|   |   \---5da81221-e300-4be3-896b-a32fd1b40c00
+|   |       \---storage_v2
+|   |           \---_src_
+|   |               \---database
+|   |                   |   car_service.StmRLQ.meta
+|   |                   |   car_service_db.k5uW_w.meta
+|   |                   |   postgres.edMnLQ.meta
+|   |                   |   
+|   |                   +---car_service.StmRLQ
+|   |                   |   \---schema
+|   |                   |           claim.PKilBQ.meta
+|   |                   |           client.y_MSrw.meta
+|   |                   |           information_schema.FNRwLQ.meta
+|   |                   |           master.YiqNvw.meta
+|   |                   |           notification.64h6Iw.meta
+|   |                   |           nsi.RKsBAA.meta
+|   |                   |           pg_catalog.0S1ZNQ.meta
+|   |                   |           public.abK9xQ.meta
+|   |                   |           warehouse.wzrviA.meta
+|   |                   |           
+|   |                   +---car_service_db.k5uW_w
+|   |                   |   \---schema
+|   |                   |           claim.PKilBQ.meta
+|   |                   |           client.y_MSrw.meta
+|   |                   |           information_schema.FNRwLQ.meta
+|   |                   |           master.YiqNvw.meta
+|   |                   |           notification.64h6Iw.meta
+|   |                   |           nsi.RKsBAA.meta
+|   |                   |           pg_catalog.0S1ZNQ.meta
+|   |                   |           public.abK9xQ.meta
+|   |                   |           warehouse.wzrviA.meta
+|   |                   |           
+|   |                   \---postgres.edMnLQ
+|   |                       \---schema
+|   |                               claim.PKilBQ.meta
+|   |                               client.y_MSrw.meta
+|   |                               information_schema.FNRwLQ.meta
+|   |                               pg_catalog.0S1ZNQ.meta
+|   |                               public.abK9xQ.meta
+|   |                               warehouse.wzrviA.meta
+|   |                               
+|   \---modules
+|       +---common-dto-parent
+|       |   +---claim-dto
+|       |   |       car-service-auto.common-dto-parent.claim-dto.main.iml
+|       |   |       
+|       |   +---client-dto
+|       |   |       car-service-auto.common-dto-parent.client-dto.main.iml
+|       |   |       
+|       |   +---master-dto
+|       |   |       car-service-auto.common-dto-parent.master-dto.main.iml
+|       |   |       
+|       |   +---notification-dto
+|       |   |       car-service-auto.common-dto-parent.notification-dto.main.iml
+|       |   |       
+|       |   +---nsi-dto
+|       |   |       car-service-auto.common-dto-parent.nsi-dto.main.iml
+|       |   |       
+|       |   \---warehouse-dto
+|       |           car-service-auto.common-dto-parent.warehouse-dto.main.iml
+|       |           
+|       +---common-entity-parent
+|       |   +---claim-entity
+|       |   |       car-service-auto.common-entity-parent.claim-entity.main.iml
+|       |   |       
+|       |   +---client-entity
+|       |   |       car-service-auto.common-entity-parent.client-entity.main.iml
+|       |   |       
+|       |   +---master-entity
+|       |   |       car-service-auto.common-entity-parent.master-entity.main.iml
+|       |   |       
+|       |   +---notification-entity
+|       |   |       car-service-auto.common-entity-parent.notification-entity.main.iml
+|       |   |       
+|       |   +---nsi-entity
+|       |   |       car-service-auto.common-entity-parent.nsi-entity.main.iml
+|       |   |       
+|       |   \---warehouse-entity
+|       |           car-service-auto.common-entity-parent.warehouse-entity.main.iml
+|       |           
+|       \---common-service-parent
+|           +---claim-microservice
+|           |       car-service-auto.common-service-parent.claim-microservice.main.iml
+|           |       car-service-auto.common-service-parent.claim-microservice.test.iml
+|           |       
+|           +---client-microservice
+|           |       car-service-auto.common-service-parent.client-microservice.main.iml
+|           |       car-service-auto.common-service-parent.client-microservice.test.iml
+|           |       
+|           +---master-microservice
+|           |       car-service-auto.common-service-parent.master-microservice.main.iml
+|           |       car-service-auto.common-service-parent.master-microservice.test.iml
+|           |       
+|           +---notification-microservice
+|           |       car-service-auto.common-service-parent.notification-microservice.main.iml
+|           |       car-service-auto.common-service-parent.notification-microservice.test.iml
+|           |       
+|           +---nsi-microservice
+|           |       car-service-auto.common-service-parent.nsi-microservice.main.iml
+|           |       car-service-auto.common-service-parent.nsi-microservice.test.iml
+|           |       
+|           \---warehouse-microservice
+|                   car-service-auto.common-service-parent.warehouse-microservice.main.iml
+|                   car-service-auto.common-service-parent.warehouse-microservice.test.iml
+|                   
++---build
+|   +---libs
+|   |       car-service-auto-0.0.1-SNAPSHOT.jar
+|   |       
+|   +---reports
+|   |   \---problems
+|   |           problems-report.html
+|   |           
+|   \---tmp
+|       \---jar
+|               MANIFEST.MF
+|               
++---common-dto-parent
+|   |   build.gradle
+|   |   
+|   +---build
+|   |   +---libs
+|   |   |       common-dto-parent-0.0.1-SNAPSHOT.jar
+|   |   |       
+|   |   \---tmp
+|   |       \---jar
+|   |               MANIFEST.MF
+|   |               
+|   +---claim-dto
+|   |   |   build.gradle
+|   |   |   
+|   |   +---build
+|   |   |   +---classes
+|   |   |   |   \---java
+|   |   |   |       \---main
+|   |   |   |           \---ru
+|   |   |   |               \---car
+|   |   |   |                   \---dto
+|   |   |   |                       \---claim
+|   |   |   |                               ClaimDto.class
+|   |   |   |                               ClaimPartDto.class
+|   |   |   |                               ClaimPriority.class
+|   |   |   |                               ClaimSearchRequest.class
+|   |   |   |                               ClaimStatus.class
+|   |   |   |                               ClaimStatusHistoryDto.class
+|   |   |   |                               ClaimStatusUpdateRequest.class
+|   |   |   |                               ClaimWorkItemDto.class
+|   |   |   |                               CreateClaimRequest.class
+|   |   |   |                               PartRequest.class
+|   |   |   |                               WorkItemCreateRequest.class
+|   |   |   |                               
+|   |   |   +---generated
+|   |   |   |   \---sources
+|   |   |   |       +---annotationProcessor
+|   |   |   |       |   \---java
+|   |   |   |       |       \---main
+|   |   |   |       \---headers
+|   |   |   |           \---java
+|   |   |   |               \---main
+|   |   |   +---libs
+|   |   |   |       claim-dto-1.0-SNAPSHOT.jar
+|   |   |   |       
+|   |   |   \---tmp
+|   |   |       +---compileJava
+|   |   |       |       previous-compilation-data.bin
+|   |   |       |       
+|   |   |       \---jar
+|   |   |               MANIFEST.MF
+|   |   |               
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---dto
+|   |       |   |               \---claim
+|   |       |   |                       ClaimDto.java
+|   |       |   |                       ClaimPartDto.java
+|   |       |   |                       ClaimPriority.java
+|   |       |   |                       ClaimSearchRequest.java
+|   |       |   |                       ClaimStatus.java
+|   |       |   |                       ClaimStatusHistoryDto.java
+|   |       |   |                       ClaimStatusUpdateRequest.java
+|   |       |   |                       ClaimWorkItemDto.java
+|   |       |   |                       CreateClaimRequest.java
+|   |       |   |                       PartRequest.java
+|   |       |   |                       WorkItemCreateRequest.java
+|   |       |   |                       
+|   |       |   \---resources
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   +---client-dto
+|   |   |   build.gradle
+|   |   |   
+|   |   +---build
+|   |   |   +---classes
+|   |   |   |   \---java
+|   |   |   |       \---main
+|   |   |   |           \---ru
+|   |   |   |               \---car
+|   |   |   |                   \---dto
+|   |   |   |                       \---client
+|   |   |   |                               ClientCarDto.class
+|   |   |   |                               ClientDto.class
+|   |   |   |                               ClientEventType.class
+|   |   |   |                               CreateClientCarRequest.class
+|   |   |   |                               CreateClientRequest.class
+|   |   |   |                               
+|   |   |   +---generated
+|   |   |   |   \---sources
+|   |   |   |       +---annotationProcessor
+|   |   |   |       |   \---java
+|   |   |   |       |       \---main
+|   |   |   |       \---headers
+|   |   |   |           \---java
+|   |   |   |               \---main
+|   |   |   +---libs
+|   |   |   |       client-dto-1.0-SNAPSHOT.jar
+|   |   |   |       
+|   |   |   \---tmp
+|   |   |       +---compileJava
+|   |   |       |   |   previous-compilation-data.bin
+|   |   |       |   |   
+|   |   |       |   \---compileTransaction
+|   |   |       |       +---backup-dir
+|   |   |       |       \---stash-dir
+|   |   |       |               ClientStatus.class.uniqueId0
+|   |   |       |               
+|   |   |       \---jar
+|   |   |               MANIFEST.MF
+|   |   |               
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---dto
+|   |       |   |               \---client
+|   |       |   |                       ClientCarDto.java
+|   |       |   |                       ClientDto.java
+|   |       |   |                       ClientEventType.java
+|   |       |   |                       CreateClientCarRequest.java
+|   |       |   |                       CreateClientRequest.java
+|   |       |   |                       
+|   |       |   \---resources
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   +---master-dto
+|   |   |   build.gradle
+|   |   |   
+|   |   +---build
+|   |   |   +---classes
+|   |   |   |   \---java
+|   |   |   |       \---main
+|   |   |   |           \---ru
+|   |   |   |               \---car
+|   |   |   |                   \---dto
+|   |   |   |                       \---master
+|   |   |   |                               CreateMasterRequest.class
+|   |   |   |                               DayType.class
+|   |   |   |                               MasterDto.class
+|   |   |   |                               MasterQualification.class
+|   |   |   |                               MasterSpecialization.class
+|   |   |   |                               MasterWorkDto.class
+|   |   |   |                               WorkScheduleDto.class
+|   |   |   |                               
+|   |   |   +---generated
+|   |   |   |   \---sources
+|   |   |   |       +---annotationProcessor
+|   |   |   |       |   \---java
+|   |   |   |       |       \---main
+|   |   |   |       \---headers
+|   |   |   |           \---java
+|   |   |   |               \---main
+|   |   |   +---libs
+|   |   |   |       master-dto-1.0-SNAPSHOT.jar
+|   |   |   |       
+|   |   |   \---tmp
+|   |   |       +---compileJava
+|   |   |       |       previous-compilation-data.bin
+|   |   |       |       
+|   |   |       \---jar
+|   |   |               MANIFEST.MF
+|   |   |               
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---dto
+|   |       |   |               \---master
+|   |       |   |                       CreateMasterRequest.java
+|   |       |   |                       DayType.java
+|   |       |   |                       MasterDto.java
+|   |       |   |                       MasterQualification.java
+|   |       |   |                       MasterSpecialization.java
+|   |       |   |                       MasterWorkDto.java
+|   |       |   |                       WorkScheduleDto.java
+|   |       |   |                       
+|   |       |   \---resources
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   +---notification-dto
+|   |   |   build.gradle
+|   |   |   
+|   |   +---build
+|   |   |   +---classes
+|   |   |   |   \---java
+|   |   |   |       \---main
+|   |   |   |           \---ru
+|   |   |   |               \---car
+|   |   |   |                   \---dto
+|   |   |   |                       \---notification
+|   |   |   |                               NotificationDto.class
+|   |   |   |                               NotificationStatus.class
+|   |   |   |                               NotificationTemplateDto.class
+|   |   |   |                               NotificationType.class
+|   |   |   |                               RecipientType.class
+|   |   |   |                               SendNotificationRequest.class
+|   |   |   |                               TemplateType.class
+|   |   |   |                               
+|   |   |   +---generated
+|   |   |   |   \---sources
+|   |   |   |       +---annotationProcessor
+|   |   |   |       |   \---java
+|   |   |   |       |       \---main
+|   |   |   |       \---headers
+|   |   |   |           \---java
+|   |   |   |               \---main
+|   |   |   +---libs
+|   |   |   |       notification-dto-1.0-SNAPSHOT.jar
+|   |   |   |       
+|   |   |   \---tmp
+|   |   |       +---compileJava
+|   |   |       |       previous-compilation-data.bin
+|   |   |       |       
+|   |   |       \---jar
+|   |   |               MANIFEST.MF
+|   |   |               
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---dto
+|   |       |   |               \---notification
+|   |       |   |                       NotificationDto.java
+|   |       |   |                       NotificationStatus.java
+|   |       |   |                       NotificationTemplateDto.java
+|   |       |   |                       NotificationType.java
+|   |       |   |                       RecipientType.java
+|   |       |   |                       SendNotificationRequest.java
+|   |       |   |                       TemplateType.java
+|   |       |   |                       
+|   |       |   \---resources
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   +---nsi-dto
+|   |   |   build.gradle
+|   |   |   
+|   |   +---build
+|   |   |   +---classes
+|   |   |   |   \---java
+|   |   |   |       \---main
+|   |   |   |           \---ru
+|   |   |   |               \---car
+|   |   |   |                   \---dto
+|   |   |   |                       \---nsi
+|   |   |   |                               CarModelDto.class
+|   |   |   |                               CarStampDto.class
+|   |   |   |                               CreateCarModelRequest.class
+|   |   |   |                               CreateCarStampRequest.class
+|   |   |   |                               CreatePartCategoryRequest.class
+|   |   |   |                               CreateServiceRequest.class
+|   |   |   |                               PartCategoryDto.class
+|   |   |   |                               ServiceDto.class
+|   |   |   |                               UpdateCarModelRequest.class
+|   |   |   |                               UpdateCarStampRequest.class
+|   |   |   |                               UpdatePartCategoryRequest.class
+|   |   |   |                               UpdateServiceRequest.class
+|   |   |   |                               VehicleType.class
+|   |   |   |                               
+|   |   |   +---generated
+|   |   |   |   \---sources
+|   |   |   |       +---annotationProcessor
+|   |   |   |       |   \---java
+|   |   |   |       |       \---main
+|   |   |   |       \---headers
+|   |   |   |           \---java
+|   |   |   |               \---main
+|   |   |   +---libs
+|   |   |   |       nsi-dto-1.0-SNAPSHOT.jar
+|   |   |   |       
+|   |   |   \---tmp
+|   |   |       +---compileJava
+|   |   |       |   |   previous-compilation-data.bin
+|   |   |       |   |   
+|   |   |       |   \---compileTransaction
+|   |   |       |       +---backup-dir
+|   |   |       |       \---stash-dir
+|   |   |       |               UpdateCarModelRequest.class.uniqueId0
+|   |   |       |               
+|   |   |       \---jar
+|   |   |               MANIFEST.MF
+|   |   |               
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---dto
+|   |       |   |               \---nsi
+|   |       |   |                       CarModelDto.java
+|   |       |   |                       CarStampDto.java
+|   |       |   |                       CreateCarModelRequest.java
+|   |       |   |                       CreateCarStampRequest.java
+|   |       |   |                       CreatePartCategoryRequest.java
+|   |       |   |                       CreateServiceRequest.java
+|   |       |   |                       PartCategoryDto.java
+|   |       |   |                       ServiceDto.java
+|   |       |   |                       UpdateCarModelRequest.java
+|   |       |   |                       UpdateCarStampRequest.java
+|   |       |   |                       UpdatePartCategoryRequest.java
+|   |       |   |                       UpdateServiceRequest.java
+|   |       |   |                       VehicleType.java
+|   |       |   |                       
+|   |       |   \---resources
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   \---warehouse-dto
+|       |   build.gradle
+|       |   
+|       +---build
+|       |   +---classes
+|       |   |   \---java
+|       |   |       \---main
+|       |   |           \---ru
+|       |   |               \---car
+|       |   |                   \---dto
+|       |   |                       \---warehouse
+|       |   |                               CreatePartRequest.class
+|       |   |                               InventoryDto.class
+|       |   |                               MeasurementUnit.class
+|       |   |                               PartDto.class
+|       |   |                               ReservationDto.class
+|       |   |                               ReservationStatus.class
+|       |   |                               SupplyDto.class
+|       |   |                               SupplyItemDto.class
+|       |   |                               SupplyStatus.class
+|       |   |                               
+|       |   +---generated
+|       |   |   \---sources
+|       |   |       +---annotationProcessor
+|       |   |       |   \---java
+|       |   |       |       \---main
+|       |   |       \---headers
+|       |   |           \---java
+|       |   |               \---main
+|       |   +---libs
+|       |   |       warehouse-dto-1.0-SNAPSHOT.jar
+|       |   |       
+|       |   \---tmp
+|       |       +---compileJava
+|       |       |       previous-compilation-data.bin
+|       |       |       
+|       |       \---jar
+|       |               MANIFEST.MF
+|       |               
+|       \---src
+|           +---main
+|           |   +---java
+|           |   |   \---ru
+|           |   |       \---car
+|           |   |           \---dto
+|           |   |               \---warehouse
+|           |   |                       CreatePartRequest.java
+|           |   |                       InventoryDto.java
+|           |   |                       MeasurementUnit.java
+|           |   |                       PartDto.java
+|           |   |                       ReservationDto.java
+|           |   |                       ReservationStatus.java
+|           |   |                       SupplyDto.java
+|           |   |                       SupplyItemDto.java
+|           |   |                       SupplyStatus.java
+|           |   |                       
+|           |   \---resources
+|           \---test
+|               +---java
+|               \---resources
++---common-entity-parent
+|   |   build.gradle
+|   |   
+|   +---build
+|   |   +---libs
+|   |   |       common-entity-parent-0.0.1-SNAPSHOT.jar
+|   |   |       
+|   |   \---tmp
+|   |       \---jar
+|   |               MANIFEST.MF
+|   |               
+|   +---claim-entity
+|   |   |   build.gradle
+|   |   |   
+|   |   +---build
+|   |   |   +---classes
+|   |   |   |   \---java
+|   |   |   |       \---main
+|   |   |   |           \---ru
+|   |   |   |               \---car
+|   |   |   |                   \---entity
+|   |   |   |                       \---claim
+|   |   |   |                               ClaimEntity$ClaimEntityBuilder.class
+|   |   |   |                               ClaimEntity.class
+|   |   |   |                               ClaimPartEntity.class
+|   |   |   |                               ClaimPriority.class
+|   |   |   |                               ClaimStatus.class
+|   |   |   |                               ClaimStatusHistoryEntity$ClaimStatusHistoryEntityBuilder.class
+|   |   |   |                               ClaimStatusHistoryEntity.class
+|   |   |   |                               ClaimWorkItemEntity.class
+|   |   |   |                               
+|   |   |   +---generated
+|   |   |   |   \---sources
+|   |   |   |       +---annotationProcessor
+|   |   |   |       |   \---java
+|   |   |   |       |       \---main
+|   |   |   |       \---headers
+|   |   |   |           \---java
+|   |   |   |               \---main
+|   |   |   +---libs
+|   |   |   |       claim-entity-1.0.jar
+|   |   |   |       
+|   |   |   \---tmp
+|   |   |       +---compileJava
+|   |   |       |   |   previous-compilation-data.bin
+|   |   |       |   |   
+|   |   |       |   \---compileTransaction
+|   |   |       |       +---backup-dir
+|   |   |       |       \---stash-dir
+|   |   |       |               ClaimEntity$ClaimEntityBuilder.class.uniqueId2
+|   |   |       |               ClaimEntity.class.uniqueId0
+|   |   |       |               ClaimPartEntity.class.uniqueId5
+|   |   |       |               ClaimStatusHistoryEntity$ClaimStatusHistoryEntityBuilder.class.uniqueId3
+|   |   |       |               ClaimStatusHistoryEntity.class.uniqueId1
+|   |   |       |               ClaimWorkItemEntity.class.uniqueId4
+|   |   |       |               
+|   |   |       \---jar
+|   |   |               MANIFEST.MF
+|   |   |               
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---entity
+|   |       |   |               \---claim
+|   |       |   |                       ClaimEntity.java
+|   |       |   |                       ClaimPartEntity.java
+|   |       |   |                       ClaimPriority.java
+|   |       |   |                       ClaimStatus.java
+|   |       |   |                       ClaimStatusHistoryEntity.java
+|   |       |   |                       ClaimWorkItemEntity.java
+|   |       |   |                       
+|   |       |   \---resources
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   +---client-entity
+|   |   |   build.gradle
+|   |   |   
+|   |   +---build
+|   |   |   +---classes
+|   |   |   |   \---java
+|   |   |   |       \---main
+|   |   |   |           \---ru
+|   |   |   |               \---car
+|   |   |   |                   \---entity
+|   |   |   |                       \---client
+|   |   |   |                               ClientCarEntity.class
+|   |   |   |                               ClientEntity$ClientEntityBuilder.class
+|   |   |   |                               ClientEntity$Status.class
+|   |   |   |                               ClientEntity.class
+|   |   |   |                               ClientHistoryEntity.class
+|   |   |   |                               ClientStatus.class
+|   |   |   |                               
+|   |   |   +---generated
+|   |   |   |   \---sources
+|   |   |   |       +---annotationProcessor
+|   |   |   |       |   \---java
+|   |   |   |       |       \---main
+|   |   |   |       \---headers
+|   |   |   |           \---java
+|   |   |   |               \---main
+|   |   |   +---libs
+|   |   |   |       client-entity-1.0-SNAPSHOT.jar
+|   |   |   |       
+|   |   |   \---tmp
+|   |   |       +---compileJava
+|   |   |       |   |   previous-compilation-data.bin
+|   |   |       |   |   
+|   |   |       |   \---compileTransaction
+|   |   |       |       +---backup-dir
+|   |   |       |       \---stash-dir
+|   |   |       |               ClientCarEntity.class.uniqueId1
+|   |   |       |               ClientEntity$ClientEntityBuilder.class.uniqueId4
+|   |   |       |               ClientEntity$Status.class.uniqueId2
+|   |   |       |               ClientEntity.class.uniqueId3
+|   |   |       |               ClientHistoryEntity.class.uniqueId0
+|   |   |       |               
+|   |   |       \---jar
+|   |   |               MANIFEST.MF
+|   |   |               
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---entity
+|   |       |   |               \---client
+|   |       |   |                       ClientCarEntity.java
+|   |       |   |                       ClientEntity.java
+|   |       |   |                       ClientHistoryEntity.java
+|   |       |   |                       ClientStatus.java
+|   |       |   |                       
+|   |       |   \---resources
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   +---master-entity
+|   |   |   build.gradle
+|   |   |   
+|   |   +---build
+|   |   |   +---classes
+|   |   |   |   \---java
+|   |   |   |       \---main
+|   |   |   |           \---ru
+|   |   |   |               \---car
+|   |   |   |                   \---entity
+|   |   |   |                       \---master
+|   |   |   |                               DayType.class
+|   |   |   |                               MasterEntity.class
+|   |   |   |                               MasterQualification.class
+|   |   |   |                               MasterSpecialization.class
+|   |   |   |                               MasterWorkEntity.class
+|   |   |   |                               WorkScheduleEntity.class
+|   |   |   |                               
+|   |   |   +---generated
+|   |   |   |   \---sources
+|   |   |   |       +---annotationProcessor
+|   |   |   |       |   \---java
+|   |   |   |       |       \---main
+|   |   |   |       \---headers
+|   |   |   |           \---java
+|   |   |   |               \---main
+|   |   |   +---libs
+|   |   |   |       master-entity-1.0-SNAPSHOT.jar
+|   |   |   |       
+|   |   |   \---tmp
+|   |   |       +---compileJava
+|   |   |       |   |   previous-compilation-data.bin
+|   |   |       |   |   
+|   |   |       |   \---compileTransaction
+|   |   |       |       +---backup-dir
+|   |   |       |       \---stash-dir
+|   |   |       |               MasterEntity.class.uniqueId0
+|   |   |       |               MasterWorkEntity.class.uniqueId2
+|   |   |       |               WorkScheduleEntity.class.uniqueId1
+|   |   |       |               
+|   |   |       \---jar
+|   |   |               MANIFEST.MF
+|   |   |               
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---entity
+|   |       |   |               \---master
+|   |       |   |                       DayType.java
+|   |       |   |                       MasterEntity.java
+|   |       |   |                       MasterQualification.java
+|   |       |   |                       MasterSpecialization.java
+|   |       |   |                       MasterWorkEntity.java
+|   |       |   |                       WorkScheduleEntity.java
+|   |       |   |                       
+|   |       |   \---resources
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   +---notification-entity
+|   |   |   build.gradle
+|   |   |   
+|   |   +---build
+|   |   |   +---classes
+|   |   |   |   \---java
+|   |   |   |       \---main
+|   |   |   +---generated
+|   |   |   |   \---sources
+|   |   |   |       +---annotationProcessor
+|   |   |   |       |   \---java
+|   |   |   |       |       \---main
+|   |   |   |       \---headers
+|   |   |   |           \---java
+|   |   |   |               \---main
+|   |   |   \---tmp
+|   |   |       \---compileJava
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---entity
+|   |       |   |               \---notification
+|   |       |   |                       NotificationEntity.java
+|   |       |   |                       NotificationTemplateEntity.java
+|   |       |   |                       
+|   |       |   \---resources
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   +---nsi-entity
+|   |   |   build.gradle
+|   |   |   
+|   |   +---build
+|   |   |   +---classes
+|   |   |   |   \---java
+|   |   |   |       \---main
+|   |   |   |           \---ru
+|   |   |   |               \---car
+|   |   |   |                   \---entity
+|   |   |   |                       \---nsi
+|   |   |   |                               CarModelEntity.class
+|   |   |   |                               CarStampEntity.class
+|   |   |   |                               PartCategoryEntity.class
+|   |   |   |                               ServiceEntity.class
+|   |   |   |                               
+|   |   |   +---generated
+|   |   |   |   \---sources
+|   |   |   |       +---annotationProcessor
+|   |   |   |       |   \---java
+|   |   |   |       |       \---main
+|   |   |   |       \---headers
+|   |   |   |           \---java
+|   |   |   |               \---main
+|   |   |   +---libs
+|   |   |   |       nsi-entity-1.0.jar
+|   |   |   |       
+|   |   |   \---tmp
+|   |   |       +---compileJava
+|   |   |       |   |   previous-compilation-data.bin
+|   |   |       |   |   
+|   |   |       |   \---compileTransaction
+|   |   |       |       +---backup-dir
+|   |   |       |       \---stash-dir
+|   |   |       |               PartCategoryEntity.class.uniqueId0
+|   |   |       |               
+|   |   |       \---jar
+|   |   |               MANIFEST.MF
+|   |   |               
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---entity
+|   |       |   |               \---nsi
+|   |       |   |                       CarModelEntity.java
+|   |       |   |                       CarStampEntity.java
+|   |       |   |                       PartCategoryEntity.java
+|   |       |   |                       ServiceEntity.java
+|   |       |   |                       
+|   |       |   \---resources
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   \---warehouse-entity
+|       |   build.gradle
+|       |   
+|       +---build
+|       |   +---classes
+|       |   |   \---java
+|       |   |       \---main
+|       |   |           \---ru
+|       |   |               \---car
+|       |   |                   \---entity
+|       |   |                       \---warehouse
+|       |   |                               InventoryEntity.class
+|       |   |                               PartEntity.class
+|       |   |                               ReservationEntity.class
+|       |   |                               SupplyEntity.class
+|       |   |                               SupplyItemEntity.class
+|       |   |                               
+|       |   +---generated
+|       |   |   \---sources
+|       |   |       +---annotationProcessor
+|       |   |       |   \---java
+|       |   |       |       \---main
+|       |   |       \---headers
+|       |   |           \---java
+|       |   |               \---main
+|       |   +---libs
+|       |   |       warehouse-entity-1.0.jar
+|       |   |       
+|       |   \---tmp
+|       |       +---compileJava
+|       |       |       previous-compilation-data.bin
+|       |       |       
+|       |       \---jar
+|       |               MANIFEST.MF
+|       |               
+|       \---src
+|           +---main
+|           |   +---java
+|           |   |   \---ru
+|           |   |       \---car
+|           |   |           \---entity
+|           |   |               \---warehouse
+|           |   |                       InventoryEntity.java
+|           |   |                       PartEntity.java
+|           |   |                       ReservationEntity.java
+|           |   |                       SupplyEntity.java
+|           |   |                       SupplyItemEntity.java
+|           |   |                       
+|           |   \---resources
+|           \---test
+|               +---java
+|               \---resources
++---common-service-parent
+|   |   build.gradle
+|   |   settings.gradle
+|   |   
+|   +---build
+|   |   +---libs
+|   |   |       common-service-parent-0.0.1.jar
+|   |   |       
+|   |   \---tmp
+|   |       \---jar
+|   |               MANIFEST.MF
+|   |               
+|   +---claim-microservice
+|   |   |   application.yml
+|   |   |   build.gradle
+|   |   |   
+|   |   +---build
+|   |   |   |   resolvedMainClassName
+|   |   |   |   
+|   |   |   +---classes
+|   |   |   |   \---java
+|   |   |   |       \---main
+|   |   |   |           \---ru
+|   |   |   |               \---car
+|   |   |   |                   \---api
+|   |   |   |                       \---claim
+|   |   |   |                           |   ClaimApplication.class
+|   |   |   |                           |   
+|   |   |   |                           +---config
+|   |   |   |                           |       SwaggerCfg.class
+|   |   |   |                           |       
+|   |   |   |                           +---controller
+|   |   |   |                           |       ClaimController.class
+|   |   |   |                           |       
+|   |   |   |                           +---mapper
+|   |   |   |                           |       ClaimMapper.class
+|   |   |   |                           |       ClaimMapperImpl$1.class
+|   |   |   |                           |       ClaimMapperImpl.class
+|   |   |   |                           |       
+|   |   |   |                           +---repository
+|   |   |   |                           |       ClaimRepository.class
+|   |   |   |                           |       
+|   |   |   |                           +---service
+|   |   |   |                           |   |   ClaimService.class
+|   |   |   |                           |   |   
+|   |   |   |                           |   \---impl
+|   |   |   |                           |           ClaimServiceImpl.class
+|   |   |   |                           |           
+|   |   |   |                           \---spec
+|   |   |   |                                   ClaimSpecification.class
+|   |   |   |                                   
+|   |   |   +---generated
+|   |   |   |   \---sources
+|   |   |   |       +---annotationProcessor
+|   |   |   |       |   \---java
+|   |   |   |       |       \---main
+|   |   |   |       |           \---ru
+|   |   |   |       |               \---car
+|   |   |   |       |                   \---api
+|   |   |   |       |                       \---claim
+|   |   |   |       |                           \---mapper
+|   |   |   |       |                                   ClaimMapperImpl.java
+|   |   |   |       |                                   
+|   |   |   |       \---headers
+|   |   |   |           \---java
+|   |   |   |               \---main
+|   |   |   +---resources
+|   |   |   |   \---main
+|   |   |   |       \---db
+|   |   |   |           \---migration
+|   |   |   |                   V0__initial_setup.sql
+|   |   |   |                   
+|   |   |   \---tmp
+|   |   |       \---compileJava
+|   |   |           |   previous-compilation-data.bin
+|   |   |           |   
+|   |   |           \---compileTransaction
+|   |   |               +---backup-dir
+|   |   |               \---stash-dir
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---api
+|   |       |   |               \---claim
+|   |       |   |                   |   ClaimApplication.java
+|   |       |   |                   |   
+|   |       |   |                   +---config
+|   |       |   |                   |       SwaggerCfg.java
+|   |       |   |                   |       
+|   |       |   |                   +---controller
+|   |       |   |                   |       ClaimController.java
+|   |       |   |                   |       
+|   |       |   |                   +---mapper
+|   |       |   |                   |       ClaimMapper.java
+|   |       |   |                   |       
+|   |       |   |                   +---repository
+|   |       |   |                   |       ClaimRepository.java
+|   |       |   |                   |       
+|   |       |   |                   +---service
+|   |       |   |                   |   |   ClaimService.java
+|   |       |   |                   |   |   
+|   |       |   |                   |   \---impl
+|   |       |   |                   |           ClaimServiceImpl.java
+|   |       |   |                   |           
+|   |       |   |                   \---spec
+|   |       |   |                           ClaimSpecification.java
+|   |       |   |                           
+|   |       |   \---resources
+|   |       |       \---db
+|   |       |           \---migration
+|   |       |                   V0__initial_setup.sql
+|   |       |                   
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   +---client-microservice
+|   |   |   application.yml
+|   |   |   build.gradle
+|   |   |   
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---api
+|   |       |   |               \---warehouse
+|   |       |   |                   |   ClientApplication.java
+|   |       |   |                   |   
+|   |       |   |                   +---config
+|   |       |   |                   +---controller
+|   |       |   |                   +---mapper
+|   |       |   |                   +---repository
+|   |       |   |                   \---service
+|   |       |   \---resources
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   +---master-microservice
+|   |   |   application.yml
+|   |   |   build.gradle
+|   |   |   
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---api
+|   |       |   |               \---master
+|   |       |   |                   |   MasterApplication.java
+|   |       |   |                   |   
+|   |       |   |                   +---config
+|   |       |   |                   +---controller
+|   |       |   |                   +---mapper
+|   |       |   |                   +---repository
+|   |       |   |                   \---service
+|   |       |   \---resources
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   +---notification-microservice
+|   |   |   application.yml
+|   |   |   build.gradle
+|   |   |   
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---api
+|   |       |   |               \---notification
+|   |       |   |                   |   NotificationApplication.java
+|   |       |   |                   |   
+|   |       |   |                   +---config
+|   |       |   |                   +---controller
+|   |       |   |                   +---mapper
+|   |       |   |                   +---repository
+|   |       |   |                   \---service
+|   |       |   \---resources
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   +---nsi-microservice
+|   |   |   application.yml
+|   |   |   build.gradle
+|   |   |   
+|   |   +---build
+|   |   |   +---classes
+|   |   |   |   \---java
+|   |   |   |       \---main
+|   |   |   +---generated
+|   |   |   |   \---sources
+|   |   |   |       +---annotationProcessor
+|   |   |   |       |   \---java
+|   |   |   |       |       \---main
+|   |   |   |       \---headers
+|   |   |   |           \---java
+|   |   |   |               \---main
+|   |   |   \---tmp
+|   |   |       \---compileJava
+|   |   \---src
+|   |       +---main
+|   |       |   +---java
+|   |       |   |   \---ru
+|   |       |   |       \---car
+|   |       |   |           \---api
+|   |       |   |               \---nsi
+|   |       |   |                   |   NsiApplication.java
+|   |       |   |                   |   
+|   |       |   |                   +---config
+|   |       |   |                   |       SwaggerCfg.java
+|   |       |   |                   |       
+|   |       |   |                   +---controller
+|   |       |   |                   |       CarModelController.java
+|   |       |   |                   |       CarStampController.java
+|   |       |   |                   |       NsiController.java
+|   |       |   |                   |       PartCategoryController.java
+|   |       |   |                   |       ServiceController.java
+|   |       |   |                   |       
+|   |       |   |                   +---mapper
+|   |       |   |                   |       CarModelMapper.java
+|   |       |   |                   |       CarStampMapper.java
+|   |       |   |                   |       PartCategoryMapper.java
+|   |       |   |                   |       ServiceMapper.java
+|   |       |   |                   |       
+|   |       |   |                   +---repository
+|   |       |   |                   |       CarModelRepository.java
+|   |       |   |                   |       CarStampRepository.java
+|   |       |   |                   |       PartCategoryRepository.java
+|   |       |   |                   |       ServiceRepository.java
+|   |       |   |                   |       
+|   |       |   |                   \---service
+|   |       |   |                       |   CarModelService.java
+|   |       |   |                       |   CarStampService.java
+|   |       |   |                       |   PartCategoryService.java
+|   |       |   |                       |   ServiceService.java
+|   |       |   |                       |   
+|   |       |   |                       \---impl
+|   |       |   |                               CarModelServiceImpl.java
+|   |       |   |                               CarStampServiceImpl.java
+|   |       |   |                               PartCategoryServiceImpl.java
+|   |       |   |                               ServiceServiceImpl.java
+|   |       |   |                               
+|   |       |   \---resources
+|   |       \---test
+|   |           +---java
+|   |           \---resources
+|   \---warehouse-microservice
+|       |   application.yml
+|       |   build.gradle
+|       |   
+|       \---src
+|           +---main
+|           |   +---java
+|           |   |   \---ru
+|           |   |       \---car
+|           |   |           \---api
+|           |   |               \---warehouse
+|           |   |                   |   WarehouseApplication.java
+|           |   |                   |   
+|           |   |                   +---config
+|           |   |                   +---controller
+|           |   |                   +---mapper
+|           |   |                   +---repository
+|           |   |                   \---service
+|           |   \---resources
+|           \---test
+|               +---java
+|               \---resources
+\---gradle
+    \---wrapper
+            gradle-wrapper.jar
+            gradle-wrapper.properties
+            
