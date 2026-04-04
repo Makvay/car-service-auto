@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "ru.car.entity.claim",
         "ru.car.entity"})
 
+@EnableFeignClients
 @SpringBootApplication
 public class ClaimApplication {
     public static void main(String[] args) {
