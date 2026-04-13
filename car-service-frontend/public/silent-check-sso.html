@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>silent-check-sso</title>
+  </head>
+  <body>
+    <script>
+      parent.postMessage(location.href, location.origin);
+
+      // Эта страница должна открываться в скрытом iframe.
+      // Если её открыли в основном окне (например, как redirect_uri),
+      // вернём пользователя обратно в приложение.
+      try {
+        if (window === window.top) {
+          window.location.replace("http://localhost:3000/");
+        }
+      } catch (e) {
+        // noop
+      }
+    </script>
+  </body>
+</html>
+

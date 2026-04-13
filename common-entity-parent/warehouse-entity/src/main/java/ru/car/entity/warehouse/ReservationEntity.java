@@ -19,14 +19,14 @@ public class ReservationEntity {
     private String reservationNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "part_id", nullable = false)
+    @JoinColumn(name = "fk_part", nullable = false)
     private PartEntity part;
 
 
     // @Column(name = "part_id", nullable = false)
     // private Long partId;
 
-    @Column(name = "claim_id", nullable = false)
+    @Column(name = "fk_claim", nullable = false)
     private Long claimId;
 
     @Column(name = "quantity", nullable = false)

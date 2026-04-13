@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+spec:
+  ports:
+  - port: 80
+    targetPort: 8091
+  selector:
+    app: gateway
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: claims
+spec:
+  ports:
+  - port: 80
+    targetPort: 8081
+  selector:
+    app: claims
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: clients
+spec:
+  ports:
+  - port: 80
+    targetPort: 8082
+  selector:
+    app: clients
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: masters
+spec:
+  ports:
+  - port: 80
+    targetPort: 8083
+  selector:
+    app: masters
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: warehouse
+spec:
+  ports:
+  - port: 80
+    targetPort: 8084
+  selector:
+    app: warehouse
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notifications
+spec:
+  ports:
+  - port: 80
+    targetPort: 8085
+  selector:
+    app: notifications
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nsi
+spec:
+  ports:
+  - port: 80
+    targetPort: 8086
+  selector:
+    app: nsi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: frontend

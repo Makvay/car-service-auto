@@ -1,0 +1,4 @@
+FROM nginx:alpine
+COPY ../car-service-frontend/build /usr/share/nginx/html
+EXPOSE 3000
+CMD ["nginx", "-g", "daemon off;"]

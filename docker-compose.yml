@@ -1,0 +1,142 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: car-postgres
+    environment:
+      POSTGRES_DB: car_service
+      POSTGRES_USER: car_user
+      POSTGRES_PASSWORD: car_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: car-redis
+    ports:
+      - "6379:6379"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: car-keycloak
+    command: start-dev
+    environment:
+      KC_DB: dev-file
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8180:8080"
+
+  gateway:
+    image: makvay/gateway:v1
+    container_name: car-gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      KEYCLOAK_AUTH_SERVER_URL: http://host.docker.internal:8180/realms/car-service
+      DB_HOST: postgres
+      REDIS_HOST: redis
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+      - redis
+      - keycloak
+
+  claims:
+    image: makvay/claims:v1
+    container_name: car-claims
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      KEYCLOAK_AUTH_SERVER_URL: http://host.docker.internal:8180/realms/car-service
+      DB_HOST: postgres
+      REDIS_HOST: redis
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+      - redis
+      - keycloak
+
+  clients:
+    image: makvay/clients:v1
+    container_name: car-clients
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      KEYCLOAK_AUTH_SERVER_URL: http://host.docker.internal:8180/realms/car-service
+      DB_HOST: postgres
+    ports:
+      - "8083:8083"
+    depends_on:
+      - postgres
+      - keycloak
+
+  masters:
+    image: makvay/masters:v1
+    container_name: car-masters
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      KEYCLOAK_AUTH_SERVER_URL: http://host.docker.internal:8180/realms/car-service
+      DB_HOST: postgres
+    ports:
+      - "8084:8084"
+    depends_on:
+      - postgres
+      - keycloak
+
+  warehouse:
+    image: makvay/warehouse:v1
+    container_name: car-warehouse
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      KEYCLOAK_AUTH_SERVER_URL: http://host.docker.internal:8180/realms/car-service
+      DB_HOST: postgres
+    ports:
+      - "8085:8085"
+    depends_on:
+      - postgres
+      - keycloak
+
+  notifications:
+    image: makvay/notifications:v1
+    container_name: car-notifications
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      KEYCLOAK_AUTH_SERVER_URL: http://host.docker.internal:8180/realms/car-service
+      DB_HOST: postgres
+    ports:
+      - "8086:8086"
+    depends_on:
+      - postgres
+      - keycloak
+
+  nsi:
+    image: makvay/nsi:v1
+    container_name: car-nsi
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      KEYCLOAK_AUTH_SERVER_URL: http://host.docker.internal:8180/realms/car-service
+      DB_HOST: postgres
+    ports:
+      - "8091:8091"
+    depends_on:
+      - postgres
+      - keycloak
+
+  frontend:
+    image: makvay/frontend:v1
+    container_name: car-frontend
+    environment:
+      REACT_APP_API_GATEWAY: http://localhost:8081
+      REACT_APP_KEYCLOAK_URL: http://localhost:8180
+      REACT_APP_REALM: car-service
+      REACT_APP_CLIENT_ID: car-service-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - gateway
+
+volumes:
+  postgres_data:

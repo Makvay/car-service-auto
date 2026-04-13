@@ -1,0 +1,180 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+      - name: gateway
+        image: makvay/gateway:v1
+        ports:
+        - containerPort: 8091
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: claims
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: claims
+  template:
+    metadata:
+      labels:
+        app: claims
+    spec:
+      containers:
+      - name: claims
+        image: makvay/claims:v1
+        ports:
+        - containerPort: 8081
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clients
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clients
+  template:
+    metadata:
+      labels:
+        app: clients
+    spec:
+      containers:
+      - name: clients
+        image: makvay/clients:v1
+        ports:
+        - containerPort: 8082
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: masters
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: masters
+  template:
+    metadata:
+      labels:
+        app: masters
+    spec:
+      containers:
+      - name: masters
+        image: makvay/masters:v1
+        ports:
+        - containerPort: 8083
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: warehouse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: warehouse
+  template:
+    metadata:
+      labels:
+        app: warehouse
+    spec:
+      containers:
+      - name: warehouse
+        image: makvay/warehouse:v1
+        ports:
+        - containerPort: 8084
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notifications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notifications
+  template:
+    metadata:
+      labels:
+        app: notifications
+    spec:
+      containers:
+      - name: notifications
+        image: makvay/notifications:v1
+        ports:
+        - containerPort: 8085
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nsi
+  template:
+    metadata:
+      labels:
+        app: nsi
+    spec:
+      containers:
+      - name: nsi
+        image: makvay/nsi:v1
+        ports:
+        - containerPort: 8086
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: makvay/frontend:v1
+        ports:
+        - containerPort: 80

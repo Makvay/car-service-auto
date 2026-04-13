@@ -1,306 +1,481 @@
-# Car Service Auto
+# 🚗 Car Service Auto — Автосервис B2B Платформа
 
 ![Java](https://img.shields.io/badge/Java-17-blue)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.4-brightgreen)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue)
-![Kafka](https://img.shields.io/badge/Apache%20Kafka-3.5-orange)
+![React](https://img.shields.io/badge/React-18-blue)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3-green)
+![Kubernetes](https://img.shields.io/badge/K8s-Ready-purple)
 
-## Описание
+Полноценная микросервисная платформа для автосервиса с веб-интерфейсом.
 
-Микросервисный проект автосервиса с 7 независимыми сервисами, построенный на стеке Java/Spring Boot.
+---
 
-**Особенности:**
-- 7 микросервисов с разными зонами ответственности
-- Общение через REST API и Apache Kafka
-- Единая точка входа через Spring Cloud Gateway
-- Своя база данных (схема) для каждого сервиса
-- Документация API через Swagger/OpenAPI
+## 📋 Содержание
 
-## Архитектура
+1. [Описание системы](#описание-системы)
+2. [Архитектура](#архитектура)
+3. [Быстрый старт](#быстрый-старт)
+4. [Настройка Keycloak](#настройка-keycloak)
+5. [Использование системы](#использование-системы)
+6. [API Документация](#api-документация)
+7. [Деплой в Kubernetes](#деплой-в-kubernetes)
+8. [Устранение проблем](#устранение-проблем)
+
+---
+
+## 📝 Описание системы
+
+**Car Service Auto** — это микросервисная платформа для управления автосервисом, включающая:
+
+- **7 микросервисов** на Spring Boot
+- **React frontend** с авторизацией через Keycloak
+- **PostgreSQL** база данных
+- **Apache Kafka** для межсервисного взаимодействия
+- **Docker** и **Kubernetes** готовность
+
+### Функционал
+
+| Модуль | Возможности |
+|--------|-------------|
+| **Клиенты** | Добавление клиентов и их автомобилей |
+| **Мастера** | Управление мастерами и специализациями |
+| **Заявки** | Создание и отслеживание заявок на ремонт |
+| **Склад** | Учёт запчастей, резервирование |
+| **Уведомления** | Автоматические уведомления о статусе |
+| **НСИ** | Справочники: марки авто, услуги, категории запчастей |
+
+---
+
+## 🏗️ Архитектура
 
 ```
-                    ┌─────────────────┐
-                    │   Gateway       │
-                    │    :8080        │
-                    └────────┬────────┘
-                             │
-      ┌──────────────────────┼──────────────────────┐
-      │          │           │           │          │
- ┌────┴────┐ ┌────┴────┐ ┌────┴────┐ ┌────┴────┐ ┌────┴────┐
- │ Claim  │ │ Client │ │ Master │ │Warehouse│ │Notification│
- │ :8081  │ │ :8082  │ │ :8083  │ │  :8084  │ │  :8085   │
- └────┬────┘ └────┬────┘ └────┬────┘ └────┬────┘ └────┬────┘
-      │          │           │           │          │
-      └──────────┴───────────┴─────┬─────┴──────────┘
-                                   │
-                            ┌──────┴──────┐
-                            │    NSI      │
-                            │   :8086     │
-                            └─────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                        Frontend (React)                          │
+│                         http://localhost:3000                   │
+└─────────────────────────────────────────────────────────────────┘
+                                  │
+                                  ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    Spring Cloud Gateway                         │
+│                         http://localhost:8081                   │
+│                     (Авторизация, маршрутизация)               │
+└─────────────────────────────────────────────────────────────────┘
+                                  │
+         ┌──────────────┬─────────┴─────────┬──────────────┐
+         │              │                   │              │
+    ┌────▼────┐   ┌────▼────┐        ┌────▼────┐   ┌────▼────┐
+    │ Claims  │   │ Clients │        │ Masters │   │Warehouse│
+    │  :8082  │   │  :8083  │        │  :8084  │   │  :8085  │
+    └────┬────┘   └────┬────┘        └────┬────┘   └────┬────┘
+         │              │                   │              │
+         └──────────────┴─────────┬─────────┴──────────────┘
+                                 │
+              ┌──────────────────┼──────────────────┐
+              │                  │                  │
+        ┌─────▼─────┐    ┌──────▼──────┐   ┌──────▼──────┐
+        │   NSI    │    │Notification │   │   PostgreSQL │
+        │  :8091   │    │   :8086     │   │    :5432     │
+        └──────────┘    └─────────────┘   └──────────────┘
 ```
 
-*Скриншот архитектуры: [Architecture Screenshot](docs/images/architecture.png)*
+### Порты сервисов
 
-## Сервисы
+| Порт | Сервис | Описание |
+|------|--------|----------|
+| 3000 | Frontend | Веб-интерфейс |
+| 8081 | Gateway | API Gateway |
+| 8082 | Claims | Заявки |
+| 8083 | Clients | Клиенты |
+| 8084 | Masters | Мастера |
+| 8085 | Warehouse | Склад |
+| 8086 | Notifications | Уведомления |
+| 8091 | NSI | Справочники |
+| 8180 | Keycloak | Авторизация |
+| 5432 | PostgreSQL | База данных |
+| 6379 | Redis | Кэш |
 
-| Порт | Сервис | Назначение | База данных |
-|------|--------|------------|-------------|
-| 8080 | Gateway | Маршрутизация, единый Swagger | - |
-| 8081 | Claim | Заявки на ремонт | claim |
-| 8082 | Client | Клиенты и автомобили | client |
-| 8083 | Master | Мастера, специализации | master |
-| 8084 | Warehouse | Склад запчастей | warehouse |
-| 8085 | Notification | Уведомления (SMS/Email) | notification |
-| 8086 | NSI | Справочники (марки, услуги) | nsi |
+---
 
-## Технологический стек
+## 🚀 Быстрый старт
 
-- **Язык:** Java 17
-- **Фреймворк:** Spring Boot 3.3.4
-- **Gateway:** Spring Cloud Gateway
-- **База данных:** PostgreSQL (отдельные схемы)
-- **Message Broker:** Apache Kafka
-- **Сборка:** Gradle (мультимодульный проект)
-- **Документация:** SpringDoc OpenAPI (Swagger)
-- **Межсервисная связь:** Feign Client, REST, Kafka
+### Вариант 1: Docker Compose (рекомендуется)
 
-![Tech Stack](docs/images/tech-stack.png)
-
-## Быстрый старт
-
-### Требования
-- JDK 17
-- PostgreSQL 15+
-- Apache Kafka
-- Gradle 9.0+
-
-### Клонирование
 ```bash
+# 1. Клонировать проект
 git clone https://github.com/Makvay/car-service-auto.git
 cd car-service-auto
+
+# 2. Запустить все сервисы
+docker-compose up -d
+
+# 3. Проверить статус
+docker-compose ps
 ```
 
-### Сборка
+**После запуска:**
+- 🌐 Frontend: http://localhost:3000
+- 🔐 Keycloak: http://localhost:8180 (admin/admin)
+- 📊 Gateway: http://localhost:8081
+
+### Вариант 2: Локальная разработка
+
 ```bash
+# Сборка всех сервисов
 ./gradlew clean build -x test
-```
 
-### Запуск всех сервисов
-
-```bash
-# Терминал 1 - Gateway
+# Запуск каждого сервиса в отдельном терминале
 ./gradlew :common-service-parent:gateway-service:bootRun
-
-# Терминал 2 - Claim
 ./gradlew :common-service-parent:claim-microservice:bootRun
-
-# Терминал 3 - Client
 ./gradlew :common-service-parent:client-microservice:bootRun
-
-# Терминал 4 - Master
 ./gradlew :common-service-parent:master-microservice:bootRun
-
-# Терминал 5 - Warehouse
 ./gradlew :common-service-parent:warehouse-microservice:bootRun
-
-# Терминал 6 - Notification
 ./gradlew :common-service-parent:notification-microservice:bootRun
-
-# Терминал 7 - NSI
 ./gradlew :common-service-parent:nsi-microservice:bootRun
 ```
 
-*Скриншот запуска: [Startup Screenshot](docs/images/startup.png)*
+### Сборка Docker образов
 
-## API Documentation (Swagger)
+```bash
+# Собрать и запустить
+cd car-service-frontend
+npm run build
 
-После запуска открыть Swagger UI:
+# Собрать образы
+docker build -t makvay/gateway:v1 ./docker/gateway
+docker build -t makvay/claims:v1 ./docker/claims
+# ... и так далее для всех сервисов
 
-| Сервис | URL |
-|--------|-----|
-| Gateway | http://localhost:8080/swagger-ui.html |
-| Claim | http://localhost:8081/swagger-ui.html |
-| Client | http://localhost:8082/swagger-ui.html |
-| Master | http://localhost:8083/swagger-ui.html |
-| Warehouse | http://localhost:8084/swagger-ui.html |
-| Notification | http://localhost:8085/swagger-ui.html |
-| NSI | http://localhost:8086/swagger-ui.html |
-
-*Пример Swagger: [Swagger Screenshot](docs/images/swagger.png)*
-
-## API Endpoints
-
-### Claim Service (8081)
+# Запустить
+docker-compose up -d
 ```
-POST   /api/v1/claims           - Создать заявку
-GET    /api/v1/claims/{id}   - Получить заявку
+
+---
+
+## 🔐 Настройка Keycloak
+
+### 1. Доступ к Keycloak
+
+Откройте http://localhost:8180 и войдите:
+- **Логин:** `admin`
+- **Пароль:** `admin`
+
+### 2. Создание Realm
+
+1. Нажмите **Create realm**
+2. Имя: `car-service`
+3. Нажмите **Create**
+
+### 3. Настройка Client
+
+1. Перейдите в **Clients** → **Create**
+2. **Client ID:** `car-service-frontend`
+3. **Client Protocol:** `openid-connect`
+4. **Root URL:** `http://localhost:3000`
+5. **Valid Redirect URIs:** `http://localhost:3000/*`
+6. **Web Origins:** `http://localhost:3000`
+7. **Access Type:** `public`
+8. **Direct Access Grants:** Enabled
+
+### 4. Создание пользователей
+
+1. Перейдите в **Users** → **Add user**
+2. Заполните данные (username, email, first name, last name)
+3. Нажмите **Create**
+4. Перейдите в **Credentials** → **Set password**
+
+---
+
+## 📖 Использование системы
+
+### Экран входа
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Car Service Auto                          │
+│                                                              │
+│                    [Логотип автосервиса]                     │
+│                                                              │
+│   ┌─────────────────────────────────────────────────────┐   │
+│   │  🔑 Вход в систему                                  │   │
+│   ├─────────────────────────────────────────────────────┤   │
+│   │  Логин:     [________________]                      │   │
+│   │  Пароль:    [________________]                      │   │
+│   │                        [Показать]                   │   │
+│   │                                                     │   │
+│   │              [  ВОЙТИ  ]                           │   │
+│   │                                                     │   │
+│   └─────────────────────────────────────────────────────┘   │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Порядок работы:**
+1. Войдите в систему (логин/пароль из Keycloak)
+2. Перейдите в раздел "Документация" в боковом меню
+3. Следуйте инструкциям
+
+### Порядок работы
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│  📋 ПОРЯДОК РАБОТЫ                                            │
+│                                                                │
+│  1️⃣  Создайте Клиентов (Clients)                               │
+│       → Добавьте клиента и его автомобиль                     │
+│                                                                │
+│  2️⃣  Добавьте Мастеров (Masters)                              │
+│       → Укажите ФИО и специализацию                           │
+│                                                                │
+│  3️⃣  Создайте Заявку (Claims)                                 │
+│       → Выберите клиента и услугу                             │
+│       → Укажите дату                                          │
+│                                                                │
+│  4️⃣  Зарезервируйте Запчасти (Warehouse)                      │
+│       → Укажите ID заявки                                     │
+│       → Выберите запчасти                                     │
+│       → Укажите количество                                    │
+│                                                                │
+│  5️⃣  Следите за Уведомлениями (Notifications)                 │
+│       → Автоматические уведомления о статусе                   │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### Главная панель (Dashboard)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ [Меню]   Dashboard  —  Car Service B2B           [🔔] [👤] [RU] │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐   │
+│  │ Активные   │ │ В работе   │ │ Готовые    │ │ Всего      │   │
+│  │   заявки   │ │            │ │            │ │ клиентов   │   │
+│  │     12     │ │     5     │ │     8     │ │     45    │   │
+│  └────────────┘ └────────────┘ └────────────┘ └────────────┘   │
+│                                                                 │
+│  ┌────────────────────────────────────────────────────────┐   │
+│  │ 📊 График заявок по месяцам                             │   │
+│  │                                                        │   │
+│  │   янв  фев  мар  апр  май  июн                        │   │
+│  │   ▓▓   ▓▓▓   ▓▓▓▓  ▓▓▓   ▓▓▓▓  ▓▓▓▓▓                  │   │
+│  └────────────────────────────────────────────────────────┘   │
+│                                                                 │
+│  ┌────────────────────────────────────────────────────────┐   │
+│  │ 📝 Последние заявки                                     │   │
+│  │ ─────────────────────────────────────────────────────  │   │
+│  │ #001 | Toyota Camry | Замена масла | В работе         │   │
+│  │ #002 | Honda Civic   | Диагностика | Новая            │   │
+│  │ #003 | BMW X5        | ТО        | Готова             │   │
+│  └────────────────────────────────────────────────────────┘   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Боковое меню
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ [Лого] Car Service                                              │
+│                                                                 │
+│ ─────────────────────────────────────────────────────────────  │
+│ 🏠  Дашборд                                                    │
+│ 📋  Заявки                                                      │
+│ 👥  Клиенты                                                     │
+│ 🔧  Мастера                                                     │
+│ 📦  Склад                                                       │
+│ 🔔  Уведомления                                                 │
+│ 📚  НСИ                                                         │
+│                                                                 │
+│ ─────────────────────────────────────────────────────────────  │
+│ 📖  Документация     ← НОВОЕ                                    │
+│                                                                 │
+│ ─────────────────────────────────────────────────────────────  │
+│ Gateway: localhost:8081                                         │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Статусы заявок
+
+| Статус | Описание | Цвет |
+|--------|----------|------|
+| NEW | Новая заявка | Синий |
+| IN_PROGRESS | В работе | Жёлтый |
+| WAITING_PARTS | Ожидает запчасти | Оранжевый |
+| DONE | Готова | Зелёный |
+| CANCELLED | Отменена | Красный |
+
+---
+
+## 📚 API Документация
+
+### Swagger UI
+
+После запуска откройте:
+- Gateway: http://localhost:8081/swagger-ui.html
+
+### Основные endpoints
+
+#### Claims (Заявки)
+```
+POST   /api/v1/claims              - Создать заявку
+GET    /api/v1/claims              - Список заявок
+GET    /api/v1/claims/{id}         - Детали заявки
 PUT    /api/v1/claims/{id}/status - Изменить статус
-GET    /api/v1/claims         - Список заявок
 ```
 
-### Client Service (8082)
+#### Clients (Клиенты)
 ```
-POST   /api/client             - Создать клиента
-GET    /api/client/{id}       - Получить клиента
-POST   /api/client/vehicle   - Добавить автомобиль
-GET    /api/client/{id}/vehicles - Автомобили клиента
-PUT    /api/client/vehicle/{id}/mileage - Обновить пробег
-```
-
-### Master Service (8083)
-```
-POST   /api/v1/masters        - Создать мастера
-GET    /api/v1/masters        - Список мастеров
-GET    /api/v1/masters/{id}   - Мастер по ID
-GET    /api/v1/masters/active - Активные мастера
-PUT    /api/v1/masters/{id}   - Обновить мастера
-DELETE /api/v1/masters/{id}   - Деактивировать
+POST   /api/client                 - Создать клиента
+GET    /api/client                - Список клиентов
+GET    /api/client/{id}           - Детали клиента
+POST   /api/client/vehicle        - Добавить автомобиль
 ```
 
-### Warehouse Service (8084)
+#### Masters (Мастера)
 ```
-POST   /api/v1/parts          - Создать запчасть
-GET    /api/v1/parts         - Список запчастей
-GET    /api/v1/parts/{id}    - Запчать по ID
-PUT    /api/v1/parts/{id}    - Обновить запчать
-DELETE /api/v1/parts/{id}   - Удалить запчать
-
-POST   /api/v1/reservations  - Создать резерв
-GET    /api/v1/reservations/claim/{claimId} - Резервы по заявке
-
-GET    /api/v1/inventory/part/{partId} - Остаток на складе
-PUT    /api/v1/inventory/{id}/quantity - Обновить количество
-
-GET    /api/v1/supplies       - Все поставки
-GET    /api/v1/supplies/{id} - Поставка по ID
-PUT    /api/v1/supplies/{id}/status - Изменить статус
+POST   /api/v1/masters            - Создать мастера
+GET    /api/v1/masters            - Список мастеров
+GET    /api/v1/masters/active     - Активные мастера
+PUT    /api/v1/masters/{id}       - Обновить мастера
 ```
 
-### Notification Service (8085)
+#### Warehouse (Склад)
 ```
-GET    /api/v1/notification              - Все уведомления
-GET    /api/v1/notification/client/{clientId} - Уведомления клиента
-```
-
-### NSI Service (8086)
-```
-GET    /api/nsi/vehicle-brands           - Марки автомобилей
-GET    /api/nsi/services               - Виды услуг
-GET    /api/nsi/part-categories        - Категории запчастей
-GET    /api/nsi/health                 - Проверка здоровья
+POST   /api/v1/parts              - Создать запчасть
+GET    /api/v1/parts              - Список запчастей
+POST   /api/v1/reservations       - Создать резерв
+GET    /api/v1/reservations/claim/{claimId} - Резервы заявки
 ```
 
-## Kafka События
-
-### Топики
-
-| Топик | Отправитель | Получатель | Описание |
-|-------|-------------|------------|----------|
-| `client.registered` | Client | Notification | Клиент зарегистрирован |
-| `vehicle.registered` | Client | Notification, Warehouse | Авто добавлено |
-| `mileage.updated` | Client | - | Пробег обновлён |
-| `claim.created` | Claim | Master, Warehouse, Notification | Новая заявка |
-| `claim.status.changed` | Claim | Notification | Статус заявки изменён |
-| `claim.assigned.to.master` | Claim | Master | Мастер назначен |
-| `work.started` | Master | Warehouse | Работы начаты |
-| `work.completed` | Master | Notification | Работы завершены |
-
-*Скриншот Kafka: [Kafka Screenshot](docs/images/kafka.png)*
-
-### Пример события (claim.created)
-```json
-{
-  "claimId": 1,
-  "clientId": 5,
-  "vehicleId": 10,
-  "description": "Замена масла",
-  "status": "CREATED",
-  "createdAt": "2024-01-15T10:30:00"
-}
+#### NSI (Справочники)
+```
+GET    /api/nsi/vehicle-brands    - Марки автомобилей
+GET    /api/nsi/services          - Виды услуг
+GET    /api/nsi/part-categories  - Категории запчастей
 ```
 
-## Структура проекта
+---
+
+## ☸️ Деплой в Kubernetes
+
+### Требования
+- Kubernetes кластер (Yandex Cloud, DigitalOcean, etc.)
+- kubectl настроенный на кластер
+- Docker образы в registry
+
+### Файлы манифестов
+
+```bash
+cd k8s
+
+# Применить все манифесты
+kubectl apply -f namespace.yaml
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+kubectl apply -f ingress.yaml
+
+# Проверить статус
+kubectl get pods -n car-service
+kubectl get services -n car-service
+```
+
+### Структура deployment
+
+```yaml
+# deployment.yaml включает:
+- Gateway (реплика: 1)
+- Claims (реплика: 1)
+- Clients (реплика: 1)
+- Masters (реплика: 1)
+- Warehouse (реплика: 1)
+- Notifications (реплика: 1)
+- NSI (реплика: 1)
+- Frontend (реплика: 1)
+```
+
+---
+
+## 🔧 Устранение проблем
+
+### Frontend не подключается к API
+
+Проверьте переменные окружения:
+```env
+REACT_APP_API_GATEWAY=http://localhost:8081
+REACT_APP_KEYCLOAK_URL=http://localhost:8180
+REACT_APP_REALM=car-service
+REACT_APP_CLIENT_ID=car-service-frontend
+```
+
+### Keycloak ошибка авторизации
+
+1. Проверьте URL Keycloak в конфигурации
+2. Проверьте Client settings в Keycloak
+3. Проверьте Credentials пользователя
+
+### Ошибка подключения к БД
+
+```bash
+# Проверить подключение к PostgreSQL
+docker exec -it car-postgres psql -U car_user -d car_service
+
+# Проверить схемы
+\dn
+```
+
+### Логи сервисов
+
+```bash
+# Посмотреть логи конкретного сервиса
+docker-compose logs gateway
+docker-compose logs claims
+docker-compose logs frontend
+
+# Все логи
+docker-compose logs -f
+```
+
+---
+
+## 📁 Структура проекта
 
 ```
 car-service-auto/
-├── common-dto-parent/          # Общие DTO
-│   ├── claim-dto/
-│   ├── client-dto/
-│   ├── master-dto/
-│   ├── nsi-dto/
-│   ├── notification-dto/
-│   └── warehouse-dto/
-├── common-entity-parent/       # Сущности JPA
-│   ├── claim-entity/
-│   ├── client-entity/
-│   ├── master-entity/
-│   ├── nsi-entity/
-│   ├── notification-entity/
-│   └── warehouse-entity/
-├── common-service-parent/       # Микросервисы
-│   ├── claim-microservice/     # :8081
-│   ├── client-microservice/    # :8082
-│   ├── gateway-service/        # :8080
-│   ├── master-microservice/    # :8083
-│   ├── nsi-microservice/       # :8086
-│   ├── notification-microservice/ # :8085
-│   └── warehouse-microservice/  # :8084
-├── docs/                       # Документация
-│   └── images/                  # Скриншоты
-└── gradle/                     # Gradle Wrapper
+├── docker/                    # Docker файлы
+│   ├── gateway/
+│   ├── claims/
+│   ├── clients/
+│   ├── masters/
+│   ├── warehouse/
+│   ├── notifications/
+│   ├── nsi/
+│   └── frontend/
+├── k8s/                      # Kubernetes манифесты
+├── car-service-frontend/     # React frontend
+├── common-dto-parent/        # DTO
+├── common-entity-parent/     # JPA entities
+├── common-service-parent/    # Microservices
+└── docker-compose.yml       # Локальный запуск
 ```
 
-## Конфигурация
+---
 
-### База данных
+## 🔗 Полезные ссылки
 
-Каждый сервис использует свою схему в PostgreSQL:
+| Сервис | URL |
+|--------|-----|
+| Frontend | http://localhost:3000 |
+| Keycloak | http://localhost:8180 |
+| Gateway API | http://localhost:8081 |
+| Swagger | http://localhost:8081/swagger-ui.html |
 
-```sql
-CREATE DATABASE car_service;
+---
 
--- Схемы создаются автоматически через Flyway
--- claim, client, master, warehouse, notification, nsi
-```
+## 📄 Лицензия
 
-### Kafka
-
-```yaml
-spring:
-  kafka:
-    bootstrap-servers: localhost:9092
-```
-
-## Тестирование
-
-```bash
-# Запустить все тесты
-./gradlew test
-
-# Запустить конкретный сервис
-./gradlew :common-service-parent:master-microservice:test
-```
-
-## Полезные ссылки
-
-- [Swagger UI](http://localhost:8081/swagger-ui.html) - Документация API
-- [Spring Boot Docs](https://docs.spring.io/spring-boot/docs/current/reference/)
-- [Spring Cloud Gateway](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/)
-- [Spring Kafka](https://docs.spring.io/spring-kafka/docs/current/reference/)
-
-## Screenshots
-
-### Запуск сервисов
-![Startup](docs/images/startup.png)
-
-### Swagger UI
-![Swagger](docs/images/swagger.png)
-
-### Архитектура
-![Architecture](docs/images/architecture.png)
+MIT License
 
 ---
 
 **Автор:** Makvay  
-**Версия:** 1.0.0  
-**Лицензия:** MIT
+**Версия:** 1.0.0
