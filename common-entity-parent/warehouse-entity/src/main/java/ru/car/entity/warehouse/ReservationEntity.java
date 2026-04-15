@@ -22,10 +22,6 @@ public class ReservationEntity {
     @JoinColumn(name = "fk_part", nullable = false)
     private PartEntity part;
 
-
-    // @Column(name = "part_id", nullable = false)
-    // private Long partId;
-
     @Column(name = "fk_claim", nullable = false)
     private Long claimId;
 

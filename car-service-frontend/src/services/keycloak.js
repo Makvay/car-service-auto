@@ -17,8 +17,6 @@ export function initKeycloak() {
   if (initResult != null) return Promise.resolve(initResult);
   if (initError != null) return Promise.reject(initError);
 
-  console.log("Starting Keycloak init...", keycloak);
-
   const initCall = keycloak.init({
     onLoad: "login-required",
     pkceMethod: "S256",
