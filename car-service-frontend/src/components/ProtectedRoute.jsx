@@ -2,15 +2,20 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
-function isAuthenticated() {
+function hasAuthSession() {
   const token = localStorage.getItem("kc_token");
   const expires = localStorage.getItem("kc_token_expires");
-  
-  if (!token || !expires) return false;
-  if (Date.now() > parseInt(expires)) {
-    return false;
+  const refreshToken = localStorage.getItem("kc_refresh_token");
+
+  if (!token) {
+    return Boolean(refreshToken);
   }
-  return true;
+
+  if (!expires) {
+    return true;
+  }
+
+  return Date.now() <= Number.parseInt(expires, 10) || Boolean(refreshToken);
 }
 
 export default function ProtectedRoute({ children }) {
@@ -19,7 +24,7 @@ export default function ProtectedRoute({ children }) {
 
   useEffect(() => {
     const checkAuth = () => {
-      if (!isAuthenticated()) {
+      if (!hasAuthSession()) {
         navigate("/login", { replace: true });
       } else {
         setStatus("ready");

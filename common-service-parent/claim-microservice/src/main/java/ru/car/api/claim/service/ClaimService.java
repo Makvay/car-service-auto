@@ -4,17 +4,19 @@ package ru.car.api.claim.service;
 import ru.car.dto.claim.*;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ClaimService {
     ClaimDto createClaim(CreateClaimRequest request);
 
     ClaimDto getClaim(Long id);
 
-    List<ClaimDto> getClientClaims(Long clientId);
+    Page<ClaimDto> getClientClaims(Long clientId, Pageable pageable);
 
-    List<ClaimDto> getAllClaims(String status, Long masterId, Boolean isPaid);
+    Page<ClaimDto> getAllClaims(String status, Long masterId, Boolean isPaid, Pageable pageable);
 
-    List<ClaimDto> searchClaims(ClaimSearchRequest searchRequest);
+    Page<ClaimDto> searchClaims(ClaimSearchRequest searchRequest, Pageable pageable);
 
     ClaimDto updateClaimStatus(Long claimId, ClaimStatusUpdateRequest request);
 
@@ -23,6 +25,10 @@ public interface ClaimService {
     ClaimDto addWorkItem(Long claimId, WorkItemCreateRequest request);
 
     ClaimDto addPart(Long claimId, PartRequest request);
+
+    ClaimDto deletePart(Long claimId, Long partId);
+
+    ClaimDto deleteWorkItem(Long claimId, Long workItemId);
 
     void deleteClaim(Long id);
 }

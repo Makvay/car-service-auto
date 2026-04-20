@@ -6,6 +6,7 @@ build/
 .kotlin
 
 ### IntelliJ IDEA ###
+.idea/
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
@@ -38,6 +39,20 @@ bin/
 
 ### VS Code ###
 .vscode/
+
+### Local env / secrets ###
+.env
+.env.local
+.env.*.local
+
+### Logs / temp artifacts ###
+*.log
+*.err.log
+*.out.log
+*.tmp
+temp_*.json
+temp_*.sql
+NUL
 
 ### Mac OS ###
 .DS_Store

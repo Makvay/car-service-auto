@@ -42,3 +42,15 @@ logging:
   level:
     ru.car.api.claim: DEBUG
     org.hibernate.SQL: DEBUG
+
+services:
+  client:
+    url: ${CLIENT_SERVICE_URL:http://localhost:8082}
+  master:
+    url: ${MASTER_SERVICE_URL:http://localhost:8083}
+  notification:
+    url: ${NOTIFICATION_SERVICE_URL:http://localhost:8085}
+
+notifications:
+  kafka:
+    enabled: ${CLAIM_NOTIFICATIONS_KAFKA_ENABLED:true}

@@ -3,7 +3,7 @@ import Keycloak from "keycloak-js";
 const keycloak = new Keycloak({
   url: "http://localhost:8180",
   realm: "car-service",
-  clientId: "frontend-client"
+  clientId: "car-service-frontend"
 });
 
 export const APP_ORIGIN = "http://localhost:3000";

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class CreateMasterRequest {
@@ -26,8 +27,7 @@ public class CreateMasterRequest {
     @Email(message = "Неверный формат email")
     private String email;
 
-    @NotBlank(message = "Специализация обязательна")
-    private String specialization;
+    private List<String> specializations;
 
     private String qualificationLevel;
 

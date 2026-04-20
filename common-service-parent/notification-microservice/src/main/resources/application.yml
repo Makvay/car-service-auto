@@ -35,6 +35,18 @@ spring:
       properties:
         spring.json.trusted.packages: "*"
 
+  mail:
+    enabled: ${MAIL_ENABLED:false}
+    host: ${MAIL_HOST:}
+    port: ${MAIL_PORT:465}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
+      mail.smtp.ssl.required: true
+      mail.smtp.starttls.enable: false
+
 logging:
   level:
     ru.car.api.notification: DEBUG

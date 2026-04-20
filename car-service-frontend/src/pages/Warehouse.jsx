@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import api from "../services/api";
 import { normalizeList } from "../utils/normalize";
 import HelpPanel from "../components/HelpPanel";
 
 export default function Warehouse() {
-  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -26,7 +24,7 @@ export default function Warehouse() {
     try {
       const [partsRes, claimsRes] = await Promise.all([
         api.get("/api/v1/parts"),
-        api.get("/api/v1/claim")
+        api.get("/api/claims")
       ]);
       setParts(normalizeList(partsRes.data));
       setClaims(normalizeList(claimsRes.data) || []);

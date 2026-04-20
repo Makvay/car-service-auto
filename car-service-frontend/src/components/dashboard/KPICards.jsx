@@ -2,6 +2,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import api from "../../services/api";
 import { normalizeList } from "../../utils/normalize";
 
+function isRead(notification) {
+  const status = String(notification?.status ?? "").toUpperCase();
+  return notification?.read === true || notification?.isRead === true || status === "READ";
+}
+
 function Card({ label, value, hint, loading }) {
   return (
     <div className="rounded-2xl border border-black/10 bg-white p-5">
@@ -27,16 +32,16 @@ export default function KPICards() {
     setLoading(true);
     setError(null);
     try {
-      const [claimsRes, mastersRes, inventoryRes, notifRes] = await Promise.all([
-        api.get("/api/v1/claim/"),
-        api.get("/api/v1/masters/"),
-        api.get("/api/v1/inventory/"),
-        api.get("/api/v1/notification/")
+      const [claimsRes, mastersRes, partsRes, notifRes] = await Promise.all([
+        api.get("/api/claims"),
+        api.get("/api/v1/masters"),
+        api.get("/api/v1/parts"),
+        api.get("/api/v1/notification")
       ]);
 
       setClaims(normalizeList(claimsRes.data));
       setMasters(normalizeList(mastersRes.data));
-      setInventory(normalizeList(inventoryRes.data));
+      setInventory(normalizeList(partsRes.data));
       setNotifications(normalizeList(notifRes.data));
     } catch (e) {
       setError(e);
@@ -85,8 +90,7 @@ export default function KPICards() {
   }, [inventory]);
 
   const unreadNotifications = useMemo(() => {
-    return notifications.filter((n) => n?.read === false || n?.isRead === false)
-      .length;
+    return notifications.filter((n) => !isRead(n)).length;
   }, [notifications]);
 
   if (error) {

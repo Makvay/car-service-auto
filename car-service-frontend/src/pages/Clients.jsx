@@ -4,6 +4,14 @@ import api from "../services/api";
 import { normalizeList } from "../utils/normalize";
 import HelpPanel from "../components/HelpPanel";
 
+function splitFullName(name = "") {
+  const trimmed = name.trim();
+  if (!trimmed) return ["", ""];
+
+  const parts = trimmed.split(/\s+/);
+  return [parts[0] ?? "", parts.slice(1).join(" ")];
+}
+
 const emptyForm = {
   id: "",
   firstName: "",
@@ -51,10 +59,11 @@ export default function Clients() {
   );
 
   const startEdit = useCallback((c) => {
+    const [firstName, lastName] = splitFullName(c?.name ?? "");
     setForm({
       id: c?.id ?? "",
-      firstName: c?.firstName ?? "",
-      lastName: c?.lastName ?? "",
+      firstName,
+      lastName,
       phone: c?.phone ?? "",
       email: c?.email ?? "",
       address: c?.address ?? ""

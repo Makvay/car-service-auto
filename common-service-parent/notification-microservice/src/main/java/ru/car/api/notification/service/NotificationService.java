@@ -7,4 +7,5 @@ import java.util.List;
 public interface NotificationService {
     List<NotificationDto> getAll();
     List<NotificationDto> getByClientId(Long clientId);
+    void markAsRead(Long id);
 }

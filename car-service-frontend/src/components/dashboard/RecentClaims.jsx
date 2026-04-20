@@ -6,13 +6,33 @@ export default function RecentClaims() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [claims, setClaims] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [masters, setMasters] = useState([]);
 
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await api.get("/api/v1/claim/");
-      setClaims(normalizeList(res.data));
+      const [claimsRes, clientsRes, mastersRes] = await Promise.all([
+        api.get("/api/claims"),
+        api.get("/api/v1/clients/"),
+        api.get("/api/v1/masters"),
+      ]);
+
+      const loadedClients = normalizeList(clientsRes.data).map((client) => {
+        if (client.firstName || client.lastName) return client;
+        if (!client.name) return client;
+        const parts = String(client.name).trim().split(/\s+/);
+        return {
+          ...client,
+          firstName: parts[0] ?? "",
+          lastName: parts.slice(1).join(" ") || "",
+        };
+      });
+
+      setClaims(normalizeList(claimsRes.data));
+      setClients(loadedClients);
+      setMasters(normalizeList(mastersRes.data));
     } catch (e) {
       setError(e);
     } finally {
@@ -33,6 +53,31 @@ export default function RecentClaims() {
     });
     return list.slice(0, 5);
   }, [claims]);
+
+  const getClientFullName = useCallback(
+    (claim) => {
+      if (claim?.clientFirstName || claim?.clientLastName) {
+        return `${claim.clientFirstName ?? ""} ${claim.clientLastName ?? ""}`.trim();
+      }
+      const client = clients.find((item) => item.id === Number(claim?.clientId));
+      if (!client) return "Клиент не найден";
+      return `${client.firstName ?? ""} ${client.lastName ?? ""}`.trim() || client.name || "Клиент не указан";
+    },
+    [clients]
+  );
+
+  const getMasterFullName = useCallback(
+    (claim) => {
+      if (claim?.masterFirstName || claim?.masterLastName) {
+        return `${claim.masterFirstName ?? ""} ${claim.masterLastName ?? ""}`.trim();
+      }
+      if (!claim?.masterId) return "Не назначен";
+      const master = masters.find((item) => item.id === Number(claim.masterId));
+      if (!master) return "Не назначен";
+      return `${master.firstName ?? ""} ${master.lastName ?? ""}`.trim() || "Не назначен";
+    },
+    [masters]
+  );
 
   return (
     <section className="mt-6">
@@ -56,7 +101,7 @@ export default function RecentClaims() {
             Ошибка загрузки: {String(error?.message ?? error)}
           </div>
         ) : loading ? (
-          <div className="p-5 text-sm text-black/60">Загрузка…</div>
+          <div className="p-5 text-sm text-black/60">Загрузка...</div>
         ) : rows.length === 0 ? (
           <div className="p-5 text-sm text-black/60">Нет данных</div>
         ) : (
@@ -71,24 +116,24 @@ export default function RecentClaims() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((c) => (
-                <tr key={c?.id ?? `${c?.client}-${c?.master}-${c?.description}`}>
+              {rows.map((claim) => (
+                <tr key={claim?.id ?? `${claim?.clientId}-${claim?.masterId}-${claim?.problemDescription}`}>
                   <td className="px-4 py-3 border-t border-black/10 tabular-nums">
-                    {c?.id ?? "—"}
+                    {claim?.id ?? "-"}
                   </td>
                   <td className="px-4 py-3 border-t border-black/10">
-                    {c?.client ?? c?.clientName ?? c?.clientId ?? "—"}
+                    {getClientFullName(claim)}
                   </td>
                   <td className="px-4 py-3 border-t border-black/10">
-                    {c?.master ?? c?.masterName ?? c?.masterId ?? "—"}
+                    {getMasterFullName(claim)}
                   </td>
                   <td className="px-4 py-3 border-t border-black/10">
                     <span className="inline-flex items-center rounded-full border border-black/10 px-3 py-1 text-xs font-medium">
-                      {String(c?.status ?? "—")}
+                      {String(claim?.status ?? "-")}
                     </span>
                   </td>
                   <td className="px-4 py-3 border-t border-black/10 tabular-nums text-black/70">
-                    {String(c?.createdAt ?? c?.date ?? "—").slice(0, 19)}
+                    {String(claim?.createdAt ?? claim?.date ?? "-").slice(0, 19)}
                   </td>
                 </tr>
               ))}
@@ -99,4 +144,3 @@ export default function RecentClaims() {
     </section>
   );
 }
-

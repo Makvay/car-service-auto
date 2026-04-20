@@ -6,6 +6,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +16,12 @@ import ru.car.api.master.service.MasterService;
 import ru.car.dto.master.CreateMasterRequest;
 import ru.car.dto.master.MasterDto;
 
+import java.util.Map;
 import java.util.List;
 
 @Tag(name = "Master Management", description = "API для управления мастерами")
 @RestController
-@RequestMapping("/api/v1/masters")
+@RequestMapping({"/api/v1/masters", "/api/masters"})
 @RequiredArgsConstructor
 public class MasterController {
 
@@ -45,6 +49,11 @@ public class MasterController {
         return ResponseEntity.ok(masterService.getMasterById(id));
     }
 
+    @GetMapping("/{id}/schedule")
+    public ResponseEntity<Map<String, Object>> getMasterSchedule(@PathVariable Long id) {
+        return ResponseEntity.ok(Map.of("masterId", id, "schedule", List.of()));
+    }
+
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Мастер найден"),
             @ApiResponse(responseCode = "404", description = "Мастер не найден"),
@@ -60,10 +69,11 @@ public class MasterController {
             @ApiResponse(responseCode = "200", description = "Список мастеров"),
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
     })
-    @Operation(summary = "Получить всех мастеров")
+    @Operation(summary = "Получить всех мастеров (пагинация)")
     @GetMapping
-    public ResponseEntity<List<MasterDto>> getAllMasters() {
-        return ResponseEntity.ok(masterService.getAllMasters());
+    public ResponseEntity<Page<MasterDto>> getAllMasters(
+            @PageableDefault(size = 20, sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(masterService.getAllMasters(pageable));
     }
 
     @ApiResponses({
@@ -72,8 +82,9 @@ public class MasterController {
     })
     @Operation(summary = "Получить активных мастеров")
     @GetMapping("/active")
-    public ResponseEntity<List<MasterDto>> getActiveMasters() {
-        return ResponseEntity.ok(masterService.getActiveMasters());
+    public ResponseEntity<Page<MasterDto>> getActiveMasters(
+            @PageableDefault(size = 20, sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(masterService.getActiveMasters(pageable));
     }
 
     @ApiResponses({
@@ -82,8 +93,10 @@ public class MasterController {
     })
     @Operation(summary = "Получить мастеров по специализации")
     @GetMapping("/specialization/{specialization}")
-    public ResponseEntity<List<MasterDto>> getMastersBySpecialization(@PathVariable String specialization) {
-        return ResponseEntity.ok(masterService.getMastersBySpecialization(specialization));
+    public ResponseEntity<Page<MasterDto>> getMastersBySpecialization(
+            @PathVariable String specialization,
+            @PageableDefault(size = 20, sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(masterService.getMastersBySpecialization(specialization, pageable));
     }
 
     @ApiResponses({

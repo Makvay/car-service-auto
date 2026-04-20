@@ -3,6 +3,7 @@ package ru.car.dto.master;
 import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class MasterDto {
@@ -12,7 +13,7 @@ public class MasterDto {
     private String lastName;
     private String phone;
     private String email;
-    private String specialization;
+    private List<String> specializations;
     private String qualificationLevel;
     private Double hourlyRate;
     private Boolean isActive;

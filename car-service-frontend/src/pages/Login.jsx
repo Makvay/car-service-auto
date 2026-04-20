@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 const KEYCLOAK_URL = process.env.REACT_APP_KEYCLOAK_URL || "http://localhost:8180";
 const REALM = process.env.REACT_APP_KEYCLOAK_REALM || "car-service";
-const CLIENT_ID = process.env.REACT_APP_KEYCLOAK_CLIENT || "frontend-client";
+const CLIENT_ID = process.env.REACT_APP_KEYCLOAK_CLIENT || "car-service-frontend";
+const SESSION_TTL_MS = 60 * 60 * 1000;
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -41,7 +42,7 @@ export default function Login() {
       
       localStorage.setItem("kc_token", data.access_token);
       localStorage.setItem("kc_refresh_token", data.refresh_token);
-      localStorage.setItem("kc_token_expires", Date.now() + data.expires_in * 1000);
+      localStorage.setItem("kc_token_expires", Date.now() + SESSION_TTL_MS);
       
       navigate("/");
     } catch (err) {

@@ -1,5 +1,7 @@
 package ru.car.api.claim.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -15,10 +17,10 @@ import java.util.Optional;
 public interface ClaimRepository extends JpaRepository
         <ClaimEntity, Long>,
         JpaSpecificationExecutor<ClaimEntity> {
-    List<ClaimEntity> findByClientId(Long clientId);
-    List<ClaimEntity> findByMasterId(Long masterId);
-    List<ClaimEntity> findByStatus(String status);
-    List<ClaimEntity> findByIsPaid(Boolean isPaid);
+    Page<ClaimEntity> findByClientId(Long clientId, Pageable pageable);
+    Page<ClaimEntity> findByMasterId(Long masterId, Pageable pageable);
+    Page<ClaimEntity> findByStatus(String status, Pageable pageable);
+    Page<ClaimEntity> findByIsPaid(Boolean isPaid, Pageable pageable);
     boolean existsByClaimNumber(String claimNumber);
 
 

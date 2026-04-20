@@ -1,5 +1,7 @@
 package ru.car.api.master.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.car.entity.master.MasterEntity;
@@ -12,8 +14,8 @@ public interface MasterRepository extends JpaRepository<MasterEntity, Long> {
     Optional<MasterEntity> findByEmployeeCode(String employeeCode);
     Optional<MasterEntity> findByPhone(String phone);
     Optional<MasterEntity> findByEmail(String email);
-    List<MasterEntity> findByIsActive(Boolean isActive);
-    List<MasterEntity> findBySpecialization(String specialization);
+    Page<MasterEntity> findByIsActive(Boolean isActive, Pageable pageable);
+    Page<MasterEntity> findBySpecialization(String specialization, Pageable pageable);
     boolean existsByEmployeeCode(String employeeCode);
     boolean existsByPhone(String phone);
     boolean existsByEmail(String email);

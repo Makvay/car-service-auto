@@ -29,4 +29,8 @@ public class CreateClaimRequest {
     private String priority;
     private LocalDate scheduledDate;
 
+    private String clientEmail;
+    private String clientName;
+    private String description;
+
 }

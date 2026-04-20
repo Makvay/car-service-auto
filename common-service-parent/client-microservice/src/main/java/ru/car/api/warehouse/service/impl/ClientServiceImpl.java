@@ -30,6 +30,13 @@ public class ClientServiceImpl implements ClientService {
     private final ClientCarMapper clientCarMapper;
 
     @Override
+    public List<ClientDto> getAllClients() {
+        return clientRepository.findAll().stream()
+                .map(clientMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public ClientDto createClient(CreateClientRequest request) {
 
         log.info("Создание клиента: {}", request.getFirstName());
@@ -56,6 +63,30 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public ClientDto updateClient(Long id, CreateClientRequest request) {
+        log.info("Обновление клиента: {}", id);
+        ClientEntity client = clientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Клиент не найден: " + id));
+
+        client.setFirstName(request.getFirstName());
+        client.setLastName(request.getLastName());
+        client.setPhone(request.getPhone());
+        client.setEmail(request.getEmail());
+
+        ClientEntity updated = clientRepository.save(client);
+        log.info("Клиент обновлён: {}", id);
+        return clientMapper.toDto(updated);
+    }
+
+    @Override
+    public void deleteClient(Long id) {
+        if (!clientRepository.existsById(id)) {
+            throw new RuntimeException("Клиент не найден: " + id);
+        }
+        clientRepository.deleteById(id);
+    }
+
+    @Override
     public ClientCarDto createVehicle(CreateClientCarRequest request) {
         log.info("Добавить авто {} " , request.getModel());
 
@@ -75,6 +106,7 @@ public class ClientServiceImpl implements ClientService {
 
         VehicleRegisteredEvent event = new VehicleRegisteredEvent(savedCar.getId(), client.getId(), savedCar.getVin());
         kafkaProducer.send("vehicle.register", event);
+        kafkaProducer.send("vehicle.registered", event);
 
         log.info("Авто добавлено: {}", savedCar.getVin());
         return clientCarMapper.toDto(savedCar);

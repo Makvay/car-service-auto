@@ -48,6 +48,8 @@ dependencies {
 
     // Database
     runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-database-postgresql'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'
@@ -60,7 +62,7 @@ dependencies {
 
 bootJar {
     enabled = true
-    mainClass = 'ru.car.api.client.ClientApplication'
+    mainClass = 'ru.car.api.warehouse.ClientApplication'
 }
 
 jar {

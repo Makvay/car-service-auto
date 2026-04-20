@@ -37,8 +37,11 @@ public class MasterEntity {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "specialization", nullable = false, length = 100)
+    @Column(name = "specialization", length = 100)
     private MasterSpecialization specialization;
+
+    // @OneToMany(mappedBy = "master", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // private List<MasterSpecializationEntity> specializations = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "qualification_level", length = 50)

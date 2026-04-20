@@ -28,8 +28,8 @@ export default function Charts() {
     setError(null);
     try {
       const [claimsRes, suppliesRes] = await Promise.all([
-        api.get("/api/v1/claim/"),
-        api.get("/api/v1/supplies/")
+        api.get("/api/claims"),
+        api.get("/api/v1/supplies")
       ]);
       setClaims(normalizeList(claimsRes.data));
       setSupplies(normalizeList(suppliesRes.data));

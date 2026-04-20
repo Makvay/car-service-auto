@@ -8,10 +8,10 @@ import ru.car.dto.client.ClientDto;
 
 import java.util.List;
 
-@FeignClient(name = "client-service", url = "http://localhost:8082")
+@FeignClient(name = "client-service", url = "${services.client.url:http://localhost:8082}")
 public interface ClientFeignClient {
 
-    @GetMapping("/api/clients/{id}")
+    @GetMapping("/api/v1/clients/{id}")
     ClientDto getClientById(@PathVariable Long id);
 
     @GetMapping("/api/client/{clientId}/vehicles")

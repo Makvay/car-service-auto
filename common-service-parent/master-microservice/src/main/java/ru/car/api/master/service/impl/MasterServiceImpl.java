@@ -2,19 +2,24 @@ package ru.car.api.master.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.car.api.master.mapper.MasterMapper;
 import ru.car.api.master.repository.MasterRepository;
+import ru.car.api.master.repository.MasterSpecializationRepository;
 import ru.car.api.master.service.MasterService;
 import ru.car.dto.master.CreateMasterRequest;
 import ru.car.dto.master.MasterDto;
 import ru.car.entity.master.MasterEntity;
 import ru.car.entity.master.MasterQualification;
-import ru.car.entity.master.MasterSpecialization;
+import ru.car.entity.master.MasterSpecializationEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -22,6 +27,7 @@ import java.util.List;
 public class MasterServiceImpl implements MasterService {
 
     private final MasterRepository masterRepository;
+    private final MasterSpecializationRepository specializationRepository;
     private final MasterMapper masterMapper;
 
     @Override
@@ -41,8 +47,6 @@ public class MasterServiceImpl implements MasterService {
 
         MasterEntity entity = masterMapper.toEntity(request);
 
-
-        entity.setSpecialization(MasterSpecialization.valueOf(request.getSpecialization()));
         if (request.getQualificationLevel() != null && !request.getQualificationLevel().isEmpty()) {
             entity.setQualificationLevel(MasterQualification.valueOf(request.getQualificationLevel()));
         }
@@ -52,6 +56,12 @@ public class MasterServiceImpl implements MasterService {
         entity.setHireDate(request.getHireDate());
 
         MasterEntity saved = masterRepository.save(entity);
+        
+        // Сохраняем специализации
+        if (request.getSpecializations() != null && !request.getSpecializations().isEmpty()) {
+            saveSpecializations(saved.getId(), request.getSpecializations());
+        }
+        
         log.info("Created master with id: {}", saved.getId());
 
         return convertToDto(saved);
@@ -74,24 +84,35 @@ public class MasterServiceImpl implements MasterService {
     }
 
     @Override
-    public List<MasterDto> getAllMasters() {
-        log.debug("Getting all masters");
-        List<MasterEntity> entities = masterRepository.findAll();
-        return convertToDtoList(entities);
+    public Page<MasterDto> getAllMasters(Pageable pageable) {
+        log.debug("Getting all masters, page: {}", pageable.getPageNumber());
+        Page<MasterEntity> entities = masterRepository.findAll(pageable);
+        return entities.map(this::convertToDto);
     }
 
     @Override
-    public List<MasterDto> getActiveMasters() {
-        log.debug("Getting active masters");
-        List<MasterEntity> entities = masterRepository.findByIsActive(true);
-        return convertToDtoList(entities);
+    public Page<MasterDto> getActiveMasters(Pageable pageable) {
+        log.debug("Getting active masters, page: {}", pageable.getPageNumber());
+        Page<MasterEntity> entities = masterRepository.findByIsActive(true, pageable);
+        return entities.map(this::convertToDto);
     }
 
     @Override
-    public List<MasterDto> getMastersBySpecialization(String specialization) {
-        log.debug("Getting masters by specialization: {}", specialization);
-        List<MasterEntity> entities = masterRepository.findBySpecialization(specialization);
-        return convertToDtoList(entities);
+    public Page<MasterDto> getMastersBySpecialization(String specialization, Pageable pageable) {
+        log.debug("Getting masters by specialization: {}, page: {}", specialization, pageable.getPageNumber());
+        List<MasterEntity> allMasters = masterRepository.findAll();
+        List<MasterEntity> filtered = allMasters.stream()
+            .filter(m -> m.getSpecialization() != null && 
+                m.getSpecialization().name().equalsIgnoreCase(specialization))
+            .collect(Collectors.toList());
+        
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), filtered.size());
+        List<MasterDto> pageContent = filtered.subList(start, end).stream()
+            .map(this::convertToDto)
+            .collect(Collectors.toList());
+        
+        return new PageImpl<>(pageContent, pageable, filtered.size());
     }
 
     @Override
@@ -105,7 +126,6 @@ public class MasterServiceImpl implements MasterService {
         entity.setLastName(request.getLastName());
         entity.setPhone(request.getPhone());
         entity.setEmail(request.getEmail());
-        entity.setSpecialization(MasterSpecialization.valueOf(request.getSpecialization()));
         if (request.getQualificationLevel() != null && !request.getQualificationLevel().isEmpty()) {
             entity.setQualificationLevel(MasterQualification.valueOf(request.getQualificationLevel()));
         }
@@ -114,6 +134,12 @@ public class MasterServiceImpl implements MasterService {
         entity.setUpdatedAt(LocalDateTime.now());
 
         MasterEntity saved = masterRepository.save(entity);
+        
+        // Обновляем специализации
+        if (request.getSpecializations() != null) {
+            saveSpecializations(saved.getId(), request.getSpecializations());
+        }
+        
         log.info("Updated master with id: {}", saved.getId());
 
         return convertToDto(saved);
@@ -143,26 +169,28 @@ public class MasterServiceImpl implements MasterService {
         log.info("Activated master with id: {}", id);
     }
 
+    private void saveSpecializations(Long masterId, List<String> specializations) {
+        specializationRepository.deleteByMasterId(masterId);
+        for (String spec : specializations) {
+            MasterSpecializationEntity entity = new MasterSpecializationEntity();
+            entity.setMasterId(masterId);
+            entity.setSpecialization(spec);
+            entity.setCreatedAt(LocalDateTime.now());
+            specializationRepository.save(entity);
+        }
+    }
 
     private MasterDto convertToDto(MasterEntity entity) {
         MasterDto dto = masterMapper.toDto(entity);
-        dto.setSpecialization(entity.getSpecialization().name());
+        
+        // Use single specialization field
+        if (entity.getSpecialization() != null) {
+            dto.setSpecializations(List.of(entity.getSpecialization().name()));
+        }
+        
         if (entity.getQualificationLevel() != null) {
             dto.setQualificationLevel(entity.getQualificationLevel().name());
         }
         return dto;
-    }
-
-    private List<MasterDto> convertToDtoList(List<MasterEntity> entities) {
-        List<MasterDto> dtos = masterMapper.toDtoList(entities);
-        for (int i = 0; i < entities.size(); i++) {
-            MasterEntity entity = entities.get(i);
-            MasterDto dto = dtos.get(i);
-            dto.setSpecialization(entity.getSpecialization().name());
-            if (entity.getQualificationLevel() != null) {
-                dto.setQualificationLevel(entity.getQualificationLevel().name());
-            }
-        }
-        return dtos;
     }
 }

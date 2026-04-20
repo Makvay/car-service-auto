@@ -1,8 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import api from "../services/api";
 import { normalizeList } from "../utils/normalize";
 import HelpPanel from "../components/HelpPanel";
+
+function isRead(notification) {
+  const status = String(notification?.status ?? "").toUpperCase();
+  return notification?.read === true || notification?.isRead === true || status === "READ";
+}
 
 export default function Notifications() {
   const [loading, setLoading] = useState(true);
@@ -27,7 +31,7 @@ export default function Notifications() {
   }, [load]);
 
   const unreadCount = useMemo(() => {
-    return items.filter((n) => n?.read === false || n?.isRead === false).length;
+    return items.filter((n) => !isRead(n)).length;
   }, [items]);
 
   const markRead = useCallback(
@@ -81,7 +85,7 @@ export default function Notifications() {
             </thead>
             <tbody>
               {items.map((n) => {
-                const read = n?.read === true || n?.isRead === true;
+                const read = isRead(n);
                 return (
                   <tr key={n?.id ?? JSON.stringify(n)}>
                     <td className="px-4 py-3 border-t border-black/10 tabular-nums">

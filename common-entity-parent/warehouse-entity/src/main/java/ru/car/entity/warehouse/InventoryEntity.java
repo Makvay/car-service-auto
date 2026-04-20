@@ -16,7 +16,7 @@ public class InventoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "part_id", nullable = false)
+    @Column(name = "fk_part", nullable = false)
     private Long partId;
 
     @Column(name = "location_id")

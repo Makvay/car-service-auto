@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.car.api.warehouse.service.InventoryService;
+import ru.car.dto.warehouse.DeductRequest;
 import ru.car.dto.warehouse.InventoryDto;
 
 import java.util.List;
@@ -46,5 +47,17 @@ public class InventoryController {
             @PathVariable Long id,
             @RequestParam Integer quantity) {
         return ResponseEntity.ok(inventoryService.updateQuantity(id, quantity));
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Товары списаны"),
+            @ApiResponse(responseCode = "400", description = "Ошибка списания"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка")
+    })
+    @PostMapping("/deduct")
+    @Operation(summary = "Списать товары со склада")
+    public ResponseEntity<Void> deductInventory(@RequestBody DeductRequest request) {
+        inventoryService.deductInventory(request);
+        return ResponseEntity.ok().build();
     }
 }

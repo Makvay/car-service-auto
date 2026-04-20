@@ -25,7 +25,7 @@ function parseJwt(token) {
 function getTokenExpiryMs() {
   const expires = localStorage.getItem("kc_token_expires");
   if (!expires) return null;
-  return parseInt(expires);
+  return Number.parseInt(expires, 10);
 }
 
 export default function Header({ title }) {
@@ -34,16 +34,14 @@ export default function Header({ title }) {
   
   const token = localStorage.getItem("kc_token");
   const tokenParsed = useMemo(() => parseJwt(token), [token]);
-  const expMs = useMemo(() => {
-    const exp = getTokenExpiryMs();
-    if (!exp) return null;
-    return exp;
-  }, []);
-
   const [now, setNow] = useState(Date.now());
+  const [expMs, setExpMs] = useState(() => getTokenExpiryMs());
 
   useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000);
+    const id = setInterval(() => {
+      setNow(Date.now());
+      setExpMs(getTokenExpiryMs());
+    }, 1000);
     return () => clearInterval(id);
   }, []);
 

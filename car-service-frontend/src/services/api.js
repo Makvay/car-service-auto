@@ -1,45 +1,54 @@
 import axios from "axios";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8091";
+const API_URL =
+  process.env.REACT_APP_API_URL ||
+  process.env.REACT_APP_API_GATEWAY ||
+  "http://localhost:8090";
 const KEYCLOAK_URL = process.env.REACT_APP_KEYCLOAK_URL || "http://localhost:8180";
+const KEYCLOAK_REALM = process.env.REACT_APP_KEYCLOAK_REALM || "car-service";
+const KEYCLOAK_CLIENT_ID = process.env.REACT_APP_KEYCLOAK_CLIENT || "car-service-frontend";
+const SESSION_TTL_MS = 60 * 60 * 1000;
 
 const api = axios.create({
   baseURL: API_URL
 });
 
-function getToken() {
+async function getToken() {
   const token = localStorage.getItem("kc_token");
   const expires = localStorage.getItem("kc_token_expires");
-  
+
   if (!token || !expires) return null;
-  if (Date.now() > parseInt(expires)) {
+  if (Date.now() > Number.parseInt(expires, 10)) {
     return refreshToken();
   }
   return token;
 }
 
 async function refreshToken() {
-  const refreshToken = localStorage.getItem("kc_refresh_token");
-  if (!refreshToken) return null;
+  const storedRefreshToken = localStorage.getItem("kc_refresh_token");
+  if (!storedRefreshToken) return null;
 
   try {
     const params = new URLSearchParams();
-    params.append("client_id", "frontend-client");
-    params.append("refresh_token", refreshToken);
+    params.append("client_id", KEYCLOAK_CLIENT_ID);
+    params.append("refresh_token", storedRefreshToken);
     params.append("grant_type", "refresh_token");
 
-    const response = await fetch(`${KEYCLOAK_URL}/realms/car-service/protocol/openid-connect/token`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: params,
-    });
+    const response = await fetch(
+      `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: params
+      }
+    );
 
     if (!response.ok) return null;
 
     const data = await response.json();
     localStorage.setItem("kc_token", data.access_token);
     localStorage.setItem("kc_refresh_token", data.refresh_token);
-    localStorage.setItem("kc_token_expires", Date.now() + data.expires_in * 1000);
+    localStorage.setItem("kc_token_expires", Date.now() + SESSION_TTL_MS);
     
     return data.access_token;
   } catch {
@@ -49,7 +58,7 @@ async function refreshToken() {
 
 api.interceptors.request.use(
   async (config) => {
-    const token = getToken();
+    const token = await getToken();
     if (token) {
       config.headers = config.headers ?? {};
       config.headers.Authorization = `Bearer ${token}`;

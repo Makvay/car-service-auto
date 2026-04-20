@@ -10,15 +10,25 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.car.api.warehouse.service.ClientService;
-import ru.car.dto.client.*;
+import ru.car.dto.client.ClientCarDto;
+import ru.car.dto.client.ClientDto;
+import ru.car.dto.client.CreateClientCarRequest;
+import ru.car.dto.client.CreateClientRequest;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/client")
+@RequestMapping({"/api/client", "/api/clients"})
 @Tag(name = "Client Management", description = "API for client and car")
 public class ClientController {
 
@@ -58,6 +68,7 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.CREATED).body(clientService.createVehicle(request));
     }
 
+
     @GetMapping("/{clientId}/vehicles")
     @Operation(summary = "Получить список автомобилей клиента")
     @ApiResponses({
@@ -67,6 +78,20 @@ public class ClientController {
     })
     public ResponseEntity<List<ClientCarDto>> getClientVehicles(@PathVariable Long clientId) {
         return ResponseEntity.ok(clientService.getClientVehicles(clientId));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Обновить данные клиента")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Клиент успешно обновлён"),
+            @ApiResponse(responseCode = "400", description = "Неверные данные запроса"),
+            @ApiResponse(responseCode = "404", description = "Клиент не найден"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
+    public ResponseEntity<ClientDto> updateClient(
+            @PathVariable Long id,
+            @Valid @RequestBody CreateClientRequest request) {
+        return ResponseEntity.ok(clientService.updateClient(id, request));
     }
 
     @PutMapping("/vehicle/{vehicleId}/mileage")
