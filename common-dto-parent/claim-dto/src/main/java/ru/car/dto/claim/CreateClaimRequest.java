@@ -17,6 +17,9 @@ public class CreateClaimRequest {
     @NotNull @Positive
     private Long vehicleId;
 
+    @NotNull @Positive
+    private Long serviceId;
+
     @NotNull
     private String problemDescription;
 

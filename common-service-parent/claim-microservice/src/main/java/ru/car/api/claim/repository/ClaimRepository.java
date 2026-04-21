@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.car.entity.claim.ClaimEntity;
+import ru.car.entity.claim.ClaimStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,7 @@ public interface ClaimRepository extends JpaRepository
         JpaSpecificationExecutor<ClaimEntity> {
     Page<ClaimEntity> findByClientId(Long clientId, Pageable pageable);
     Page<ClaimEntity> findByMasterId(Long masterId, Pageable pageable);
-    Page<ClaimEntity> findByStatus(String status, Pageable pageable);
+    Page<ClaimEntity> findByStatus(ClaimStatus status, Pageable pageable);
     Page<ClaimEntity> findByIsPaid(Boolean isPaid, Pageable pageable);
     boolean existsByClaimNumber(String claimNumber);
 

@@ -50,6 +50,10 @@ services:
     url: ${MASTER_SERVICE_URL:http://localhost:8083}
   notification:
     url: ${NOTIFICATION_SERVICE_URL:http://localhost:8085}
+  warehouse:
+    url: ${WAREHOUSE_SERVICE_URL:http://localhost:8084}
+  nsi:
+    url: ${NSI_SERVICE_URL:http://localhost:8086}
 
 notifications:
   kafka:

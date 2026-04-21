@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.car.dto.warehouse.DeductRequest;
 
-@FeignClient(name = "warehouse-service", url = "http://warehouse:8084")
+@FeignClient(name = "warehouse-service", url = "${services.warehouse.url:http://localhost:8084}")
 public interface WarehouseFeignClient {
 
     @PostMapping("/api/v1/inventory/deduct")

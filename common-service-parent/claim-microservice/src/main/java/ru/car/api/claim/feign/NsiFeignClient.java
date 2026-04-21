@@ -7,7 +7,7 @@ import ru.car.dto.nsi.VehicleType;
 
 import java.util.List;
 
-@FeignClient(name = "nsi-service", url = "http://localhost:8086")
+@FeignClient(name = "nsi-service", url = "${services.nsi.url:http://localhost:8086}")
 public interface NsiFeignClient {
 
     @GetMapping("/api/nsi/services")

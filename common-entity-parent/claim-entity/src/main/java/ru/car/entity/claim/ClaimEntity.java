@@ -29,6 +29,9 @@ public class ClaimEntity {
     @Column(name = "vehicle_id", nullable = false)
     private Long vehicleId;
 
+    @Column(name = "service_id", nullable = false)
+    private Long serviceId;
+
     @Column(name = "master_id")
     private Long masterId;
 

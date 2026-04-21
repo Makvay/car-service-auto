@@ -8,8 +8,6 @@ import java.util.List;
 public interface InventoryRepository extends JpaRepository<InventoryEntity,Long> {
 
     List<InventoryEntity> findByPartId(Long partId);
-
-
-
+    List<InventoryEntity> findByPartIdOrderByIdAsc(Long partId);
 
 }

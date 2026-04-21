@@ -4,6 +4,11 @@ server:
 spring:
   main:
     web-application-type: reactive
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8180/realms/car-service}
 
   cloud:
     gateway:
@@ -29,7 +34,7 @@ spring:
         - id: claim-service
           uri: http://${CLAIM_SERVICE_HOST:localhost}:8081
           predicates:
-            - Path=/api/claims,/api/claims/**,/api/v1/claim,/api/v1/claim/**,/api/claim
+            - Path=/api/claims,/api/claims/**,/api/v1/claims,/api/v1/claims/**,/api/v1/claim,/api/v1/claim/**,/api/claim
         - id: client-service
           uri: http://${CLIENT_SERVICE_HOST:localhost}:8082
           predicates:

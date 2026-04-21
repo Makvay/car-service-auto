@@ -28,6 +28,7 @@ public interface ClaimMapper {
     @Mapping(target = "usedParts", ignore = true)
     @Mapping(source = "clientId", target = "clientId")
     @Mapping(source = "vehicleId", target = "vehicleId")
+    @Mapping(source = "serviceId", target = "serviceId")
     @Mapping(source = "problemDescription", target = "problemDescription")
     @Mapping(source = "customerNotes", target = "customerNotes")
     @Mapping(source = "internalNotes", target = "internalNotes")

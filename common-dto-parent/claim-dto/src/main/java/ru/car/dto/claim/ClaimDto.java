@@ -15,6 +15,7 @@ public class ClaimDto {
     private String clientLastName;
     private String clientPhone;
     private Long vehicleId;
+    private Long serviceId;
     private String vehicleVin;
     private String vehicleLicensePlate;
     private String vehicleBrand;

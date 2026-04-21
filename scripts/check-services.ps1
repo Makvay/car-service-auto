@@ -5,7 +5,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 $targets = @(
-    @{ Name = "gateway"; Port = 8080; Health = "http://$HostName:8080/actuator/health" },
+    @{ Name = "gateway"; Port = 8090; Health = "http://$HostName:8090/actuator/health" },
     @{ Name = "claim"; Port = 8081; Health = "http://$HostName:8081/actuator/health" },
     @{ Name = "client"; Port = 8082; Health = "http://$HostName:8082/actuator/health" },
     @{ Name = "master"; Port = 8083; Health = "http://$HostName:8083/actuator/health" },

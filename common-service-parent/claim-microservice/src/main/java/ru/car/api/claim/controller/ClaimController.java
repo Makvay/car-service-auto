@@ -34,7 +34,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/claims")
+@RequestMapping({"/api/claims", "/api/v1/claims"})
 @Tag(name = "Claim Management", description = "API для управления заявками на обслуживание")
 public class ClaimController {
 
@@ -171,7 +171,7 @@ public class ClaimController {
         return ResponseEntity.ok(claimService.addPart(id, request));
     }
 
-    @DeleteMapping("/{id}/parts/{partId}")
+    @DeleteMapping("/{id}/parts/{claimPartId}")
     @Operation(summary = "Удалить запчасть из заявки")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Запчасть успешно удалена"),
@@ -180,8 +180,8 @@ public class ClaimController {
     })
     public ResponseEntity<ClaimDto> deletePart(
             @PathVariable Long id,
-            @PathVariable Long partId) {
-        return ResponseEntity.ok(claimService.deletePart(id, partId));
+            @PathVariable Long claimPartId) {
+        return ResponseEntity.ok(claimService.deletePart(id, claimPartId));
     }
 
     @DeleteMapping("/{id}/work-items/{workItemId}")

@@ -179,6 +179,7 @@ export default function Claims() {
         const createResponse = await api.post("/api/claims", {
           clientId: Number(form.clientId),
           vehicleId: Number(form.vehicleId) || 1,
+          serviceId: Number(form.serviceId),
           mileageAtEntry: Number(form.mileage) || 1000,
           problemDescription: form.description.trim(),
           scheduledDate: form.scheduledDate || null,

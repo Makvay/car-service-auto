@@ -26,7 +26,7 @@ public interface ClaimService {
 
     ClaimDto addPart(Long claimId, PartRequest request);
 
-    ClaimDto deletePart(Long claimId, Long partId);
+    ClaimDto deletePart(Long claimId, Long claimPartId);
 
     ClaimDto deleteWorkItem(Long claimId, Long workItemId);
 
