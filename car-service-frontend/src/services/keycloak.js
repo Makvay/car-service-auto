@@ -1,12 +1,16 @@
 import Keycloak from "keycloak-js";
 
-const keycloak = new Keycloak({
-  url: "http://localhost:8180",
-  realm: "car-service",
-  clientId: "car-service-frontend"
-});
+const KEYCLOAK_URL = process.env.REACT_APP_KEYCLOAK_URL || "http://localhost:8180";
+const KEYCLOAK_REALM = process.env.REACT_APP_KEYCLOAK_REALM || "car-service";
+const KEYCLOAK_CLIENT = process.env.REACT_APP_KEYCLOAK_CLIENT || "car-service-frontend";
+const APP_ORIGIN = process.env.REACT_APP_APP_ORIGIN || "http://localhost:3000";
 
-export const APP_ORIGIN = "http://localhost:3000";
+const keycloak = new Keycloak({
+  url: KEYCLOAK_URL,
+  realm: KEYCLOAK_REALM,
+  clientId: KEYCLOAK_CLIENT
+});
+export { APP_ORIGIN };
 
 let initPromise = null;
 let initResult = null;

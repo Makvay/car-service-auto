@@ -28,7 +28,7 @@ function getTokenExpiryMs() {
   return Number.parseInt(expires, 10);
 }
 
-export default function Header({ title }) {
+export default function Header({ title = "Dashboard" }) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   
@@ -120,8 +120,4 @@ export default function Header({ title }) {
 
 Header.propTypes = {
   title: PropTypes.string
-};
-
-Header.defaultProps = {
-  title: "Dashboard"
 };

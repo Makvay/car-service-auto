@@ -52,6 +52,8 @@ services:
 
     ports:
       - "8180:8080"
+    volumes:
+      - ./keycloak/car-service-realm.json:/opt/keycloak/data/import/car-service-realm.json:ro
 
   gateway:
     image: makvay/gateway:v1
@@ -65,6 +67,7 @@ services:
       NOTIFICATION_SERVICE_HOST: notifications
       NSI_SERVICE_HOST: nsi
       KEYCLOAK_AUTH_SERVER_URL: http://host.docker.internal:8180/realms/car-service
+      KEYCLOAK_ISSUER_URI: http://host.docker.internal:8180/realms/car-service
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/car_service
       SPRING_DATASOURCE_USERNAME: car_user
       SPRING_DATASOURCE_PASSWORD: car_pass

@@ -1,9 +1,20 @@
 import axios from "axios";
 
-const API_URL =
-  process.env.REACT_APP_API_URL ||
-  process.env.REACT_APP_API_GATEWAY ||
-  "http://localhost:8090";
+function resolveApiUrl() {
+  const explicit = process.env.REACT_APP_API_URL;
+  if (explicit && explicit.trim()) {
+    return explicit.trim();
+  }
+
+  const legacy = process.env.REACT_APP_API_GATEWAY;
+  if (legacy && legacy.trim()) {
+    return legacy.includes(":8080") ? legacy.replace(":8080", ":8090") : legacy.trim();
+  }
+
+  return "http://localhost:8090";
+}
+
+const API_URL = resolveApiUrl();
 const KEYCLOAK_URL = process.env.REACT_APP_KEYCLOAK_URL || "http://localhost:8180";
 const KEYCLOAK_REALM = process.env.REACT_APP_KEYCLOAK_REALM || "car-service";
 const KEYCLOAK_CLIENT_ID = process.env.REACT_APP_KEYCLOAK_CLIENT || "car-service-frontend";
