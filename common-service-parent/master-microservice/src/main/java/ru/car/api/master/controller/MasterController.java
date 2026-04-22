@@ -12,12 +12,14 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.car.api.master.repository.WorkScheduleRepository;
 import ru.car.api.master.service.MasterService;
 import ru.car.dto.master.CreateMasterRequest;
 import ru.car.dto.master.MasterDto;
 
-import java.util.Map;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "Master Management", description = "API для управления мастерами")
 @RestController
@@ -26,6 +28,7 @@ import java.util.List;
 public class MasterController {
 
     private final MasterService masterService;
+    private final WorkScheduleRepository workScheduleRepository;
 
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Мастер создан"),
@@ -51,7 +54,19 @@ public class MasterController {
 
     @GetMapping("/{id}/schedule")
     public ResponseEntity<Map<String, Object>> getMasterSchedule(@PathVariable Long id) {
-        return ResponseEntity.ok(Map.of("masterId", id, "schedule", List.of()));
+        LocalDate from = LocalDate.now().minusDays(1);
+        LocalDate to = LocalDate.now().plusDays(30);
+
+        List<Map<String, Object>> schedule = workScheduleRepository.findByMasterIdAndDateBetween(id, from, to).stream()
+                .map(item -> Map.<String, Object>of(
+                        "date", item.getDate(),
+                        "startTime", item.getStartTime(),
+                        "endTime", item.getEndTime(),
+                        "dayType", item.getDayType()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(Map.of("masterId", id, "schedule", schedule));
     }
 
     @ApiResponses({

@@ -56,7 +56,10 @@ services:
       - ./keycloak/car-service-realm.json:/opt/keycloak/data/import/car-service-realm.json:ro
 
   gateway:
-    image: makvay/gateway:v1
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-gateway
+    image: makvay/gateway:local
     container_name: car-gateway
     environment:
       SPRING_PROFILES_ACTIVE: prod
@@ -67,7 +70,7 @@ services:
       NOTIFICATION_SERVICE_HOST: notifications
       NSI_SERVICE_HOST: nsi
       KEYCLOAK_AUTH_SERVER_URL: http://host.docker.internal:8180/realms/car-service
-      KEYCLOAK_ISSUER_URI: http://host.docker.internal:8180/realms/car-service
+      KEYCLOAK_JWK_SET_URI: http://host.docker.internal:8180/realms/car-service/protocol/openid-connect/certs
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/car_service
       SPRING_DATASOURCE_USERNAME: car_user
       SPRING_DATASOURCE_PASSWORD: car_pass

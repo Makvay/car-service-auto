@@ -15,6 +15,8 @@ public interface ReservationService {
 
         ReservationDto createReservation(ReservationDto dto);
         List<ReservationDto> getByClaimId(Long claimId);
+        int releaseByClaimId(Long claimId);
+        int useByClaimId(Long claimId);
 
 
 

@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface MasterSpecializationRepository extends JpaRepository<MasterSpecializationEntity, Long> {
     List<MasterSpecializationEntity> findByMasterId(Long masterId);
+    List<MasterSpecializationEntity> findBySpecializationIgnoreCase(String specialization);
     void deleteByMasterId(Long masterId);
 }

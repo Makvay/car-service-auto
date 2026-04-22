@@ -25,6 +25,7 @@ import ru.car.dto.claim.ClaimDto;
 import ru.car.dto.claim.ClaimPriority;
 import ru.car.dto.claim.ClaimSearchRequest;
 import ru.car.dto.claim.ClaimStatus;
+import ru.car.dto.claim.ClaimStatusHistoryDto;
 import ru.car.dto.claim.ClaimStatusUpdateRequest;
 import ru.car.dto.claim.CreateClaimRequest;
 import ru.car.dto.claim.PartRequest;
@@ -112,6 +113,12 @@ public class ClaimController {
     })
     public ResponseEntity<ClaimDto> getClaim(@PathVariable Long id) {
         return ResponseEntity.ok(claimService.getClaim(id));
+    }
+
+    @GetMapping("/{id}/status-history")
+    @Operation(summary = "Получить историю изменения статусов заявки")
+    public ResponseEntity<List<ClaimStatusHistoryDto>> getStatusHistory(@PathVariable Long id) {
+        return ResponseEntity.ok(claimService.getStatusHistory(id));
     }
 
     @PutMapping("/{id}/status")

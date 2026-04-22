@@ -30,5 +30,7 @@ public interface ClaimService {
 
     ClaimDto deleteWorkItem(Long claimId, Long workItemId);
 
+    List<ClaimStatusHistoryDto> getStatusHistory(Long claimId);
+
     void deleteClaim(Long id);
 }

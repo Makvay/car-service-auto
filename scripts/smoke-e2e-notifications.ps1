@@ -1,8 +1,9 @@
 param(
-    [string]$BaseUrl = "http://localhost:8081",
+    [string]$BaseUrl = "http://localhost:8090",
     [int]$ClientId = 1,
     [int]$MasterId = 1,
-    [int]$VehicleId = 1
+    [int]$VehicleId = 1,
+    [int]$ServiceId = 1
 )
 
 $ErrorActionPreference = "Stop"
@@ -27,6 +28,7 @@ Write-Host "Running claim->status smoke chain against $BaseUrl ..." -ForegroundC
 $createPayload = @{
     clientId = $ClientId
     vehicleId = $VehicleId
+    serviceId = $ServiceId
     mileageAtEntry = 1000
     problemDescription = "Smoke test notification flow"
     priority = "NORMAL"

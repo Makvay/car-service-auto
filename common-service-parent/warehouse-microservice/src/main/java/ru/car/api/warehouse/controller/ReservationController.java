@@ -46,4 +46,18 @@ public class ReservationController {
     public ResponseEntity<List<ReservationDto>> getByClaimId(@PathVariable Long claimId) {
         return ResponseEntity.ok(reservationService.getByClaimId(claimId));
     }
+
+    @PostMapping("/claim/{claimId}/release")
+    @Operation(summary = "Снять резервы по заявке")
+    public ResponseEntity<String> releaseByClaim(@PathVariable Long claimId) {
+        int count = reservationService.releaseByClaimId(claimId);
+        return ResponseEntity.ok("Released reservations: " + count);
+    }
+
+    @PostMapping("/claim/{claimId}/use")
+    @Operation(summary = "Пометить резервы по заявке как использованные")
+    public ResponseEntity<String> useByClaim(@PathVariable Long claimId) {
+        int count = reservationService.useByClaimId(claimId);
+        return ResponseEntity.ok("Consumed reservations: " + count);
+    }
 }

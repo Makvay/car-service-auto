@@ -24,6 +24,7 @@ import ru.car.api.claim.spec.ClaimSpecification;
 import ru.car.dto.claim.ClaimDto;
 import ru.car.dto.claim.ClaimPriority;
 import ru.car.dto.claim.ClaimSearchRequest;
+import ru.car.dto.claim.ClaimStatusHistoryDto;
 import ru.car.dto.claim.ClaimStatusUpdateRequest;
 import ru.car.dto.claim.CreateClaimRequest;
 import ru.car.dto.claim.PartRequest;
@@ -42,6 +43,8 @@ import ru.car.entity.claim.ClaimWorkItemEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -49,6 +52,21 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ClaimServiceImpl implements ClaimService {
+
+    private static final Map<ClaimStatus, Set<ClaimStatus>> ALLOWED_TRANSITIONS = Map.ofEntries(
+            Map.entry(ClaimStatus.CREATED, Set.of(ClaimStatus.WAITING_DIAGNOSIS, ClaimStatus.WAITING_APPROVAL, ClaimStatus.WAITING_PARTS, ClaimStatus.IN_PROGRESS, ClaimStatus.CANCELLED)),
+            Map.entry(ClaimStatus.WAITING_DIAGNOSIS, Set.of(ClaimStatus.DIAGNOSIS_IN_PROGRESS, ClaimStatus.CANCELLED)),
+            Map.entry(ClaimStatus.DIAGNOSIS_IN_PROGRESS, Set.of(ClaimStatus.WAITING_APPROVAL, ClaimStatus.WAITING_PARTS, ClaimStatus.CANCELLED)),
+            Map.entry(ClaimStatus.WAITING_APPROVAL, Set.of(ClaimStatus.APPROVED, ClaimStatus.REJECTED, ClaimStatus.CANCELLED)),
+            Map.entry(ClaimStatus.APPROVED, Set.of(ClaimStatus.WAITING_PARTS, ClaimStatus.IN_PROGRESS, ClaimStatus.CANCELLED)),
+            Map.entry(ClaimStatus.REJECTED, Set.of(ClaimStatus.CANCELLED)),
+            Map.entry(ClaimStatus.WAITING_PARTS, Set.of(ClaimStatus.IN_PROGRESS, ClaimStatus.CANCELLED)),
+            Map.entry(ClaimStatus.IN_PROGRESS, Set.of(ClaimStatus.WAITING_PAYMENT, ClaimStatus.COMPLETED, ClaimStatus.CANCELLED)),
+            Map.entry(ClaimStatus.WAITING_PAYMENT, Set.of(ClaimStatus.PAID, ClaimStatus.CANCELLED)),
+            Map.entry(ClaimStatus.PAID, Set.of(ClaimStatus.COMPLETED)),
+            Map.entry(ClaimStatus.COMPLETED, Set.of()),
+            Map.entry(ClaimStatus.CANCELLED, Set.of())
+    );
 
     private final ClaimRepository claimRepository;
     private final ClaimPartRepository claimPartRepository;
@@ -105,7 +123,7 @@ public class ClaimServiceImpl implements ClaimService {
     public Page<ClaimDto> getAllClaims(String status, Long masterId, Boolean isPaid, Pageable pageable) {
         Page<ClaimEntity> claims;
         if (status != null) {
-            claims = claimRepository.findByStatus(parseStatus(status), pageable);
+            claims = claimRepository.findByStatus(parseFilterStatus(status), pageable);
         } else if (masterId != null) {
             claims = claimRepository.findByMasterId(masterId, pageable);
         } else if (isPaid != null) {
@@ -123,7 +141,11 @@ public class ClaimServiceImpl implements ClaimService {
                 .orElseThrow(() -> new RuntimeException("Claim not found: " + claimId));
 
         ClaimStatus oldStatus = claim.getStatus();
-        ClaimStatus newStatus = parseStatus(request.getStatus());
+        ClaimStatus newStatus = ClaimStatus.valueOf(request.getStatus().name());
+        if (newStatus == null) {
+            throw new RuntimeException("Status is required");
+        }
+        validateTransition(oldStatus, newStatus);
 
         if (oldStatus == newStatus) {
             return toDtoWithNumber(claim);
@@ -149,9 +171,6 @@ public class ClaimServiceImpl implements ClaimService {
         String masterName = resolveMasterName(updatedClaim.getMasterId());
 
         notifyClaimStatusChanged(updatedClaim, clientContact, newStatus, masterName);
-        if (newStatus == ClaimStatus.COMPLETED && kafkaNotificationsEnabled) {
-            publishEvent("work.completed", updatedClaim, clientContact, newStatus.name());
-        }
 
         return toDtoWithNumber(updatedClaim);
     }
@@ -257,6 +276,26 @@ public class ClaimServiceImpl implements ClaimService {
 
         claimWorkItemRepository.delete(workItem);
         return getClaim(claimId);
+    }
+
+    @Override
+    public List<ClaimStatusHistoryDto> getStatusHistory(Long claimId) {
+        claimRepository.findById(claimId)
+                .orElseThrow(() -> new RuntimeException("Claim not found: " + claimId));
+
+        return claimStatusHistoryRepository.findByClaimIdOrderByCreatedAtDesc(claimId).stream()
+                .map(history -> {
+                    ClaimStatusHistoryDto dto = new ClaimStatusHistoryDto();
+                    dto.setId(history.getId());
+                    dto.setClaimId(history.getClaim().getId());
+                    dto.setOldStatus(history.getOldStatus());
+                    dto.setNewStatus(history.getNewStatus());
+                    dto.setChangedBy(history.getChangedBy());
+                    dto.setNotes(history.getNotes());
+                    dto.setCreatedAt(history.getCreatedAt());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -423,11 +462,18 @@ public class ClaimServiceImpl implements ClaimService {
         kafkaTemplate.send(topic, event);
     }
 
-    private ClaimStatus parseStatus(String status) {
+    private void validateTransition(ClaimStatus oldStatus, ClaimStatus newStatus) {
+        Set<ClaimStatus> allowed = ALLOWED_TRANSITIONS.getOrDefault(oldStatus, Set.of());
+        if (!allowed.contains(newStatus)) {
+            throw new RuntimeException("Invalid status transition: " + oldStatus + " -> " + newStatus);
+        }
+    }
+
+    private ClaimStatus parseFilterStatus(String status) {
         try {
             return ClaimStatus.valueOf(status);
         } catch (Exception e) {
-            throw new RuntimeException("Unsupported claim status: " + status);
+            throw new RuntimeException("Unsupported claim status filter: " + status);
         }
     }
 

@@ -96,6 +96,70 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationMapper.toDtoList(reservations);
     }
 
+    @Override
+    @Transactional
+    public int releaseByClaimId(Long claimId) {
+        List<ReservationEntity> reservations = reservationRepository.findByClaimId(claimId);
+        int updated = 0;
+        for (ReservationEntity reservation : reservations) {
+            if (!"RESERVED".equalsIgnoreCase(reservation.getStatus())) {
+                continue;
+            }
+            List<InventoryEntity> inventories = inventoryRepository.findByPartIdOrderByIdAsc(reservation.getPart().getId());
+            int toRelease = safe(reservation.getQuantity());
+            for (InventoryEntity inventory : inventories) {
+                if (toRelease == 0) {
+                    break;
+                }
+                int reserved = safe(inventory.getReservedQuantity());
+                if (reserved == 0) {
+                    continue;
+                }
+                int release = Math.min(reserved, toRelease);
+                inventory.setReservedQuantity(reserved - release);
+                inventoryRepository.save(inventory);
+                toRelease -= release;
+            }
+            reservation.setStatus("CANCELLED");
+            reservation.setCancelledAt(LocalDateTime.now());
+            reservationRepository.save(reservation);
+            updated++;
+        }
+        return updated;
+    }
+
+    @Override
+    @Transactional
+    public int useByClaimId(Long claimId) {
+        List<ReservationEntity> reservations = reservationRepository.findByClaimId(claimId);
+        int updated = 0;
+        for (ReservationEntity reservation : reservations) {
+            if (!"RESERVED".equalsIgnoreCase(reservation.getStatus())) {
+                continue;
+            }
+            List<InventoryEntity> inventories = inventoryRepository.findByPartIdOrderByIdAsc(reservation.getPart().getId());
+            int toConsume = safe(reservation.getQuantity());
+            for (InventoryEntity inventory : inventories) {
+                if (toConsume == 0) {
+                    break;
+                }
+                int reserved = safe(inventory.getReservedQuantity());
+                if (reserved == 0) {
+                    continue;
+                }
+                int consume = Math.min(reserved, toConsume);
+                inventory.setReservedQuantity(reserved - consume);
+                inventoryRepository.save(inventory);
+                toConsume -= consume;
+            }
+            reservation.setStatus("USED");
+            reservation.setUsedAt(LocalDateTime.now());
+            reservationRepository.save(reservation);
+            updated++;
+        }
+        return updated;
+    }
+
     private int safe(Integer value) {
         return value == null ? 0 : value;
     }

@@ -15,6 +15,7 @@ import ru.car.dto.master.CreateMasterRequest;
 import ru.car.dto.master.MasterDto;
 import ru.car.entity.master.MasterEntity;
 import ru.car.entity.master.MasterQualification;
+import ru.car.entity.master.MasterSpecialization;
 import ru.car.entity.master.MasterSpecializationEntity;
 
 import java.time.LocalDateTime;
@@ -49,6 +50,9 @@ public class MasterServiceImpl implements MasterService {
 
         if (request.getQualificationLevel() != null && !request.getQualificationLevel().isEmpty()) {
             entity.setQualificationLevel(MasterQualification.valueOf(request.getQualificationLevel()));
+        }
+        if (request.getSpecializations() != null && !request.getSpecializations().isEmpty()) {
+            entity.setSpecialization(MasterSpecialization.valueOf(request.getSpecializations().get(0)));
         }
 
         entity.setIsActive(true);
@@ -100,13 +104,16 @@ public class MasterServiceImpl implements MasterService {
     @Override
     public Page<MasterDto> getMastersBySpecialization(String specialization, Pageable pageable) {
         log.debug("Getting masters by specialization: {}, page: {}", specialization, pageable.getPageNumber());
-        List<MasterEntity> allMasters = masterRepository.findAll();
-        List<MasterEntity> filtered = allMasters.stream()
-            .filter(m -> m.getSpecialization() != null && 
-                m.getSpecialization().name().equalsIgnoreCase(specialization))
+        List<Long> masterIds = specializationRepository.findBySpecializationIgnoreCase(specialization).stream()
+            .map(MasterSpecializationEntity::getMasterId)
+            .distinct()
             .collect(Collectors.toList());
+        List<MasterEntity> filtered = masterRepository.findAllById(masterIds);
         
         int start = (int) pageable.getOffset();
+        if (start >= filtered.size()) {
+            return new PageImpl<>(List.of(), pageable, filtered.size());
+        }
         int end = Math.min(start + pageable.getPageSize(), filtered.size());
         List<MasterDto> pageContent = filtered.subList(start, end).stream()
             .map(this::convertToDto)
@@ -128,6 +135,9 @@ public class MasterServiceImpl implements MasterService {
         entity.setEmail(request.getEmail());
         if (request.getQualificationLevel() != null && !request.getQualificationLevel().isEmpty()) {
             entity.setQualificationLevel(MasterQualification.valueOf(request.getQualificationLevel()));
+        }
+        if (request.getSpecializations() != null && !request.getSpecializations().isEmpty()) {
+            entity.setSpecialization(MasterSpecialization.valueOf(request.getSpecializations().get(0)));
         }
         entity.setHourlyRate(request.getHourlyRate());
         entity.setHireDate(request.getHireDate());

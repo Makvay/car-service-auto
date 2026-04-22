@@ -1,12 +1,12 @@
 package ru.car.dto.claim;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import jakarta.validation.constraints.NotNull;
 
 @Data
 public class ClaimStatusUpdateRequest {
-    @NotBlank(message = "Status is required")
-    private String status;
+    @NotNull(message = "Status is required")
+    private ClaimStatus status;
     private String comment;
 }
 
