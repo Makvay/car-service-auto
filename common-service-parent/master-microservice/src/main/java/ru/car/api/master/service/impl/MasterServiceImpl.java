@@ -192,11 +192,11 @@ public class MasterServiceImpl implements MasterService {
 
     private MasterDto convertToDto(MasterEntity entity) {
         MasterDto dto = masterMapper.toDto(entity);
-        
-        // Use single specialization field
-        if (entity.getSpecialization() != null) {
-            dto.setSpecializations(List.of(entity.getSpecialization().name()));
-        }
+        List<String> specs = specializationRepository.findByMasterId(entity.getId()).stream()
+                .map(MasterSpecializationEntity::getSpecialization)
+                .distinct()
+                .toList();
+        dto.setSpecializations(specs);
         
         if (entity.getQualificationLevel() != null) {
             dto.setQualificationLevel(entity.getQualificationLevel().name());

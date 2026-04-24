@@ -29,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping({"/api/client", "/api/clients"})
+@Deprecated(forRemoval = false)
 @Tag(name = "Client Management", description = "API for client and car")
 public class ClientController {
 

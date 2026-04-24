@@ -41,7 +41,7 @@ public class ReservationServiceImpl implements ReservationService {
         PartEntity part = partRepository.findById(dto.getPartId())
                 .orElseThrow(() -> new RuntimeException("Part not found: " + dto.getPartId()));
 
-        List<InventoryEntity> inventories = inventoryRepository.findByPartIdOrderByIdAsc(dto.getPartId());
+        List<InventoryEntity> inventories = inventoryRepository.findWithLockByPartIdOrderByIdAsc(dto.getPartId());
         if (inventories.isEmpty()) {
             throw new RuntimeException("Part not found in inventory: " + dto.getPartId());
         }
@@ -105,7 +105,7 @@ public class ReservationServiceImpl implements ReservationService {
             if (!"RESERVED".equalsIgnoreCase(reservation.getStatus())) {
                 continue;
             }
-            List<InventoryEntity> inventories = inventoryRepository.findByPartIdOrderByIdAsc(reservation.getPart().getId());
+            List<InventoryEntity> inventories = inventoryRepository.findWithLockByPartIdOrderByIdAsc(reservation.getPart().getId());
             int toRelease = safe(reservation.getQuantity());
             for (InventoryEntity inventory : inventories) {
                 if (toRelease == 0) {
@@ -137,7 +137,7 @@ public class ReservationServiceImpl implements ReservationService {
             if (!"RESERVED".equalsIgnoreCase(reservation.getStatus())) {
                 continue;
             }
-            List<InventoryEntity> inventories = inventoryRepository.findByPartIdOrderByIdAsc(reservation.getPart().getId());
+            List<InventoryEntity> inventories = inventoryRepository.findWithLockByPartIdOrderByIdAsc(reservation.getPart().getId());
             int toConsume = safe(reservation.getQuantity());
             for (InventoryEntity inventory : inventories) {
                 if (toConsume == 0) {

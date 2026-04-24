@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClaimEvent {
+    private String eventId;
+    private String occurredAt;
     private Long claimId;
     private String claimNumber;
     private String clientEmail;

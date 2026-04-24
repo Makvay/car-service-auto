@@ -53,11 +53,14 @@ public class MasterController {
     }
 
     @GetMapping("/{id}/schedule")
-    public ResponseEntity<Map<String, Object>> getMasterSchedule(@PathVariable Long id) {
-        LocalDate from = LocalDate.now().minusDays(1);
-        LocalDate to = LocalDate.now().plusDays(30);
+    public ResponseEntity<Map<String, Object>> getMasterSchedule(
+            @PathVariable Long id,
+            @RequestParam(required = false) LocalDate from,
+            @RequestParam(required = false) LocalDate to) {
+        LocalDate rangeFrom = from != null ? from : LocalDate.now().minusDays(1);
+        LocalDate rangeTo = to != null ? to : LocalDate.now().plusDays(30);
 
-        List<Map<String, Object>> schedule = workScheduleRepository.findByMasterIdAndDateBetween(id, from, to).stream()
+        List<Map<String, Object>> schedule = workScheduleRepository.findByMasterIdAndDateBetween(id, rangeFrom, rangeTo).stream()
                 .map(item -> Map.<String, Object>of(
                         "date", item.getDate(),
                         "startTime", item.getStartTime(),
@@ -66,7 +69,7 @@ public class MasterController {
                 ))
                 .toList();
 
-        return ResponseEntity.ok(Map.of("masterId", id, "schedule", schedule));
+        return ResponseEntity.ok(Map.of("masterId", id, "from", rangeFrom, "to", rangeTo, "schedule", schedule));
     }
 
     @ApiResponses({

@@ -13,6 +13,7 @@ import ru.car.dto.client.CreateClientCarRequest;
 
 @RestController
 @RequiredArgsConstructor
+@Deprecated(forRemoval = false)
 public class VehicleCompatController {
 
     private final ClientService clientService;

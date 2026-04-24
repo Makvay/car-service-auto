@@ -48,7 +48,7 @@ public class InventoryServiceImpl implements InventoryService {
             if (item.getPartId() == null || item.getQuantity() == null || item.getQuantity() <= 0) {
                 throw new RuntimeException("Invalid deduction item: partId and positive quantity are required");
             }
-            List<InventoryEntity> inventories = inventoryRepository.findByPartIdOrderByIdAsc(item.getPartId());
+            List<InventoryEntity> inventories = inventoryRepository.findWithLockByPartIdOrderByIdAsc(item.getPartId());
             if (inventories.isEmpty()) {
                 throw new RuntimeException("Part " + item.getPartId() + " not found in inventory");
             }
@@ -63,7 +63,7 @@ public class InventoryServiceImpl implements InventoryService {
 
         for (DeductRequest.DeductItem item : request.getItems()) {
             int required = item.getQuantity();
-            List<InventoryEntity> inventories = inventoryRepository.findByPartIdOrderByIdAsc(item.getPartId());
+            List<InventoryEntity> inventories = inventoryRepository.findWithLockByPartIdOrderByIdAsc(item.getPartId());
             for (InventoryEntity inventory : inventories) {
                 if (required == 0) {
                     break;

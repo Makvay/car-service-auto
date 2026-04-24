@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "reservations", schema = "warehouse")
@@ -45,4 +46,21 @@ public class ReservationEntity {
 
     @Column(name = "notes")
     private String notes;
+
+    @Version
+    @Column(name = "version", nullable = false)
+    private Long version;
+
+    @PrePersist
+    void prePersist() {
+        if (reservationNumber == null || reservationNumber.isBlank()) {
+            reservationNumber = "RSV-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        }
+        if (status == null || status.isBlank()) {
+            status = "RESERVED";
+        }
+        if (reservedAt == null) {
+            reservedAt = LocalDateTime.now();
+        }
+    }
 }

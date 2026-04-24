@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.car.api.claim.feign.ClientFeignClient;
 import ru.car.api.claim.feign.MasterFeignClient;
 import ru.car.api.claim.feign.NotificationFeignClient;
@@ -19,6 +19,7 @@ import ru.car.api.claim.repository.ClaimPartRepository;
 import ru.car.api.claim.repository.ClaimRepository;
 import ru.car.api.claim.repository.ClaimStatusHistoryRepository;
 import ru.car.api.claim.repository.ClaimWorkItemRepository;
+import ru.car.api.claim.repository.OutboxEventRepository;
 import ru.car.api.claim.service.ClaimService;
 import ru.car.api.claim.spec.ClaimSpecification;
 import ru.car.dto.claim.ClaimDto;
@@ -40,6 +41,7 @@ import ru.car.entity.claim.ClaimPartEntity;
 import ru.car.entity.claim.ClaimStatus;
 import ru.car.entity.claim.ClaimStatusHistoryEntity;
 import ru.car.entity.claim.ClaimWorkItemEntity;
+import ru.car.entity.claim.OutboxEventEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -77,8 +79,9 @@ public class ClaimServiceImpl implements ClaimService {
     private final MasterFeignClient masterFeignClient;
     private final NsiFeignClient nsiFeignClient;
     private final NotificationFeignClient notificationFeignClient;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
     private final WarehouseFeignClient warehouseFeignClient;
+    private final OutboxEventRepository outboxEventRepository;
+    private final ObjectMapper objectMapper;
 
     @Value("${notifications.kafka.enabled:false}")
     private boolean kafkaNotificationsEnabled;
@@ -189,11 +192,13 @@ public class ClaimServiceImpl implements ClaimService {
 
         if (kafkaNotificationsEnabled) {
             ClaimEvent event = new ClaimEvent();
+            event.setEventId(UUID.randomUUID().toString());
+            event.setOccurredAt(LocalDateTime.now().toString());
             event.setClaimId(updatedClaim.getId());
             event.setClaimNumber(updatedClaim.getClaimNumber());
             event.setStatus("ASSIGNED_TO_MASTER");
             event.setDescription(updatedClaim.getProblemDescription());
-            kafkaTemplate.send("claim.assigned.to.master", event);
+            saveOutboxEvent("claim.assigned.to.master", event);
         }
 
         return toDtoWithNumber(updatedClaim);
@@ -453,13 +458,30 @@ public class ClaimServiceImpl implements ClaimService {
 
     private void publishEvent(String topic, ClaimEntity claim, ClientContact clientContact, String status) {
         ClaimEvent event = new ClaimEvent();
+        event.setEventId(UUID.randomUUID().toString());
+        event.setOccurredAt(LocalDateTime.now().toString());
         event.setClaimId(claim.getId());
         event.setClaimNumber(claim.getClaimNumber());
         event.setClientEmail(clientContact.email());
         event.setClientName(clientContact.name());
         event.setStatus(status);
         event.setDescription(claim.getProblemDescription());
-        kafkaTemplate.send(topic, event);
+        saveOutboxEvent(topic, event);
+    }
+
+    private void saveOutboxEvent(String topic, Object event) {
+        try {
+            OutboxEventEntity outbox = new OutboxEventEntity();
+            outbox.setEventId(UUID.randomUUID().toString());
+            outbox.setTopic(topic);
+            outbox.setPayload(objectMapper.writeValueAsString(event));
+            outbox.setStatus("NEW");
+            outbox.setAttempts(0);
+            outbox.setCreatedAt(LocalDateTime.now());
+            outboxEventRepository.save(outbox);
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot save outbox event for topic " + topic, e);
+        }
     }
 
     private void validateTransition(ClaimStatus oldStatus, ClaimStatus newStatus) {

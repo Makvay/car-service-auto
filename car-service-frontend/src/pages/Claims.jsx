@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import api from "../services/api";
 import { normalizeList } from "../utils/normalize";
 import HelpPanel from "../components/HelpPanel";
@@ -40,6 +40,8 @@ export default function Claims() {
   const [updatingClaimId, setUpdatingClaimId] = useState(null);
   const [createError, setCreateError] = useState(null);
   const [actionError, setActionError] = useState(null);
+  const [historyByClaim, setHistoryByClaim] = useState({});
+  const [historyLoading, setHistoryLoading] = useState({});
   const [form, setForm] = useState(EMPTY_FORM);
 
   const load = useCallback(async () => {
@@ -220,6 +222,27 @@ export default function Claims() {
     [load]
   );
 
+  const toggleHistory = useCallback(async (claimId) => {
+    if (historyByClaim[claimId]) {
+      setHistoryByClaim((prev) => {
+        const next = { ...prev };
+        delete next[claimId];
+        return next;
+      });
+      return;
+    }
+
+    setHistoryLoading((prev) => ({ ...prev, [claimId]: true }));
+    try {
+      const response = await api.get(`/api/claims/${claimId}/status-history`);
+      setHistoryByClaim((prev) => ({ ...prev, [claimId]: normalizeList(response.data) }));
+    } catch (requestError) {
+      setActionError(requestError);
+    } finally {
+      setHistoryLoading((prev) => ({ ...prev, [claimId]: false }));
+    }
+  }, [historyByClaim]);
+
   return (
     <div className="space-y-6">
       <HelpPanel />
@@ -387,32 +410,58 @@ export default function Claims() {
             </thead>
             <tbody>
               {items.map((claim) => (
-                <tr key={claim.id} className="border-t border-black/10">
-                  <td className="px-4 py-3">{claim.claimNumber || claim.id}</td>
-                  <td className="px-4 py-3">{getClientName(claim)}</td>
-                  <td className="px-4 py-3">{getMasterName(claim)}</td>
-                  <td className="px-4 py-3">
-                    <span className={`inline-block rounded px-2 py-1 text-xs font-medium ${getStatusColor(claim.status)}`}>
-                      {getStatusLabel(claim.status)}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">{claim.problemDescription || "—"}</td>
-                  <td className="px-4 py-3">{getPriorityLabel(claim.priority)}</td>
-                  <td className="px-4 py-3 text-right">
-                    <select
-                      value={claim.status}
-                      disabled={updatingClaimId === claim.id}
-                      onChange={(event) => updateStatus(claim.id, event.target.value)}
-                      className="rounded-xl border border-black/15 bg-white px-3 py-2 text-xs"
-                    >
-                      {STATUS_OPTIONS.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                </tr>
+                <Fragment key={claim.id}>
+                  <tr className="border-t border-black/10">
+                    <td className="px-4 py-3">{claim.claimNumber || claim.id}</td>
+                    <td className="px-4 py-3">{getClientName(claim)}</td>
+                    <td className="px-4 py-3">{getMasterName(claim)}</td>
+                    <td className="px-4 py-3">
+                      <span className={`inline-block rounded px-2 py-1 text-xs font-medium ${getStatusColor(claim.status)}`}>
+                        {getStatusLabel(claim.status)}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">{claim.problemDescription || "—"}</td>
+                    <td className="px-4 py-3">{getPriorityLabel(claim.priority)}</td>
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => toggleHistory(claim.id)}
+                          className="rounded-xl border border-black/15 bg-white px-3 py-2 text-xs hover:bg-black/[0.03]"
+                        >
+                          {historyLoading[claim.id] ? "..." : historyByClaim[claim.id] ? "Скрыть историю" : "История"}
+                        </button>
+                        <select
+                          value={claim.status}
+                          disabled={updatingClaimId === claim.id}
+                          onChange={(event) => updateStatus(claim.id, event.target.value)}
+                          className="rounded-xl border border-black/15 bg-white px-3 py-2 text-xs"
+                        >
+                          {STATUS_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </td>
+                  </tr>
+                  {historyByClaim[claim.id] ? (
+                    <tr className="border-t border-black/10 bg-black/[0.02]">
+                      <td className="px-4 py-2 text-xs text-black/70" colSpan={7}>
+                        {historyByClaim[claim.id].length === 0 ? (
+                          <span>История пустая</span>
+                        ) : (
+                          historyByClaim[claim.id].map((h) => (
+                            <div key={h.id} className="py-1">
+                              {h.createdAt || "—"}: {h.oldStatus || "—"} → {h.newStatus || "—"} {h.notes ? `(${h.notes})` : ""}
+                            </div>
+                          ))
+                        )}
+                      </td>
+                    </tr>
+                  ) : null}
+                </Fragment>
               ))}
             </tbody>
           </table>
