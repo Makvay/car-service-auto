@@ -35,7 +35,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping({"/api/claims", "/api/v1/claims"})
+@RequestMapping("/api/v1/claims")
 @Tag(name = "Claim Management", description = "API для управления заявками на обслуживание")
 public class ClaimController {
 

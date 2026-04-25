@@ -34,36 +34,37 @@ spring:
         - id: claim-service
           uri: http://${CLAIM_SERVICE_HOST:localhost}:8081
           predicates:
-            - Path=/api/claims,/api/claims/**,/api/v1/claims,/api/v1/claims/**,/api/v1/claim,/api/v1/claim/**,/api/claim
+            - Path=/api/v1/claims,/api/v1/claims/**
         - id: client-service
           uri: http://${CLIENT_SERVICE_HOST:localhost}:8082
           predicates:
-            - Path=/api/client,/api/client/**,/api/clients,/api/clients/**,/api/v1/clients,/api/v1/clients/**
+            - Path=/api/v1/clients,/api/v1/clients/**
         - id: master-service
           uri: http://${MASTER_SERVICE_HOST:localhost}:8083
           predicates:
-            - Path=/api/masters,/api/masters/**,/api/v1/masters,/api/v1/masters/**
-        - id: warehouse-service-compat-parts
-          uri: http://${WAREHOUSE_SERVICE_HOST:localhost}:8084
-          predicates:
-            - Path=/api/warehouse/parts,/api/warehouse/parts/**
-          filters:
-            - RewritePath=/api/warehouse/parts/?(?<segment>.*), /api/v1/parts/$\{segment}
-        - id: warehouse-service-compat-reservations
-          uri: http://${WAREHOUSE_SERVICE_HOST:localhost}:8084
-          predicates:
-            - Path=/api/warehouse/reservations,/api/warehouse/reservations/**
-          filters:
-            - RewritePath=/api/warehouse/reservations/?(?<segment>.*), /api/v1/reservations/$\{segment}
+            - Path=/api/v1/masters,/api/v1/masters/**
         - id: warehouse-service
           uri: http://${WAREHOUSE_SERVICE_HOST:localhost}:8084
           predicates:
-            - Path=/api/parts,/api/parts/**,/api/v1/parts,/api/v1/parts/**,/api/v1/reservations,/api/v1/reservations/**,/api/v1/inventory,/api/v1/inventory/**,/api/v1/supplies,/api/v1/supplies/**
+            - Path=/api/v1/parts,/api/v1/parts/**,/api/v1/reservations,/api/v1/reservations/**,/api/v1/inventory,/api/v1/inventory/**,/api/v1/supplies,/api/v1/supplies/**
         - id: notification-service
           uri: http://${NOTIFICATION_SERVICE_HOST:localhost}:8085
           predicates:
-            - Path=/api/notification,/api/notification/**,/api/notifications,/api/notifications/**,/api/v1/notification,/api/v1/notification/**
+            - Path=/api/v1/notification,/api/v1/notification/**
         - id: nsi-service
           uri: http://${NSI_SERVICE_HOST:localhost}:8086
           predicates:
-            - Path=/api/nsi,/api/nsi/**
+            - Path=/api/v1/nsi,/api/v1/nsi/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true

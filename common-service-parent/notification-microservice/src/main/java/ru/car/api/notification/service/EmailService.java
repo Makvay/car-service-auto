@@ -5,8 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.io.Serial;
 
 @Slf4j
 @Service
@@ -22,6 +27,11 @@ public class EmailService {
     private String mailUsername;
 
     @Async
+    @Retryable(
+            retryFor = {Exception.class},
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 1000, multiplier = 2.0, maxDelay = 10000)
+    )
     public void sendEmail(String to, String subject, String body) {
         if (!mailEnabled) {
             log.info(">>> MOCK EMAIL to={}, subject={}", to, subject);
@@ -29,22 +39,23 @@ public class EmailService {
             return;
         }
 
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(to);
-            message.setSubject(subject);
-            message.setText(body);
-            if (mailUsername != null && !mailUsername.isBlank()) {
-                message.setFrom(mailUsername);
-            }
-
-            mailSender.send(message);
-            log.info("Email отправлен на {}: {}", to, subject);
-        } catch (Exception e) {
-            log.error("Ошибка отправки email на {}: {}", to, e.getMessage());
-            log.info(">>> MOCK EMAIL (fallback) to={}, subject={}", to, subject);
-            log.info(">>> BODY: {}", body);
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        if (mailUsername != null && !mailUsername.isBlank()) {
+            message.setFrom(mailUsername);
         }
+
+        mailSender.send(message);
+        log.info("Email отправлен на {}: {}", to, subject);
+    }
+
+    @Recover
+    public void recoverEmail(Exception e, String to, String subject, String body) {
+        log.error("Failed to send email after retries to {}: {}. Fallback to mock.", to, e.getMessage());
+        log.info(">>> MOCK EMAIL (fallback) to={}, subject={}", to, subject);
+        log.info(">>> BODY: {}", body);
     }
 
     public void sendEmailToClient(String clientEmail, String subject, String body) {

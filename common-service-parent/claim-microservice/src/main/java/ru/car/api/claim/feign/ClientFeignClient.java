@@ -8,7 +8,7 @@ import ru.car.dto.client.ClientDto;
 
 import java.util.List;
 
-@FeignClient(name = "client-service", url = "${services.client.url:http://localhost:8082}")
+@FeignClient(name = "client-service", url = "${services.client.url:http://localhost:8082}", fallback = ClientFeignClientFallback.class)
 public interface ClientFeignClient {
 
     @GetMapping("/api/v1/clients/{id}")

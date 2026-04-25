@@ -26,6 +26,19 @@ spring:
     schemas: nsi
     baseline-on-migrate: true
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
 logging:
   level:
     ru.car.api.nsi: DEBUG
